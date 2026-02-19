@@ -40,4 +40,3 @@ class DBClient:
         except Exception as e:
             print(f"Failed to load sql file {file_name}. Exception: {str(e)}")
             raise
-
