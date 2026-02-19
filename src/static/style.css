@@ -1,0 +1,83 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+
+body {
+    background-color: #f8f9fa;
+}
+
+.navbar-brand {
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+.card {
+    border-radius: 12px;
+}
+
+.nav-text {
+    font-size: 40px;          
+    font-weight: 700;        
+    font-family: 'Bebas Neue', Arial, sans-serif;
+    letter-spacing: 2px;
+}
+
+.nav-logo {
+    height: 50px;
+}
+
+.link {
+    color: #ff8800;
+    text-decoration: none;
+}
+
+.link:hover {
+    color: #cc6d00;
+    text-decoration: underline;
+}
+
+.btn-custom {
+    background-color: #000000;
+    border-color: #000000;
+    color: #ffffff;
+    padding: 10px 30px;
+    transition: all 0.3s ease;
+    font-family: 'Bebas Neue', Arial, sans-serif;
+}
+
+.btn-custom:hover {
+    background-color: #ff8800;
+    border-color: #ff8800;
+    color: #ffffff;
+}
+
+.auth-text {
+    font-size: 60px;          
+    font-weight: 500;        
+    font-family: 'Bebas Neue', Arial, sans-serif;
+    letter-spacing: 2px;
+}
+
+.auth-sub-text {
+    font-size: 20px;
+    font-weight: 1;     
+    font-family: 'Bebas Neue', Arial, sans-serif;
+    letter-spacing: 3px;
+}
+
+.btn-register {
+    width: 100%;
+}
+
+.btn-login {
+    width: 100%;
+}
+
+.btn-logout {
+    min-width: 120px;
+}
+
+.btn-switch {
+    min-width: 180px;
+    font-size: 20px;
+    font-weight: 1;
+    letter-spacing: 3px;
+}

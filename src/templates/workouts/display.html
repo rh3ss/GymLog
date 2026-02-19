@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="bg-light">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid d-flex align-items-center">
+            <div style="width:120px;"></div>
+            <div class="mx-auto d-flex align-items-center">
+                <span class="navbar-brand nav-text mb-0">GymLog</span>
+                <img src="{{ url_for('static', filename='img/logo.png') }}" alt="GymLog Logo" class="nav-logo">
+            </div>
+            <div class="d-flex">
+                <a href="{{ url_for('auth.logout') }}" class="btn btn-custom btn-logout">Logout</a>
+            </div>
+        </div>
+    </nav>
+    <div class="container mt-5">
+        <div class="d-flex justify-content-center mt-4">
+            <a href="{{ url_for('workouts.overview') }}" class="btn btn-custom btn-switch mx-2">Übersicht</a>
+            <a href="{{ url_for('workouts.create') }}" class="btn btn-custom btn-switch mx-2">Anlegen</a>
+            <a href="{{ url_for('workouts.display') }}" class="btn btn-custom btn-switch mx-2">Anzeigen</a>
+            <a href="{{ url_for('workouts.statistics') }}" class="btn btn-custom btn-switch mx-2">Statistik</a>
+        </div>
+    </div>
+	    <div class="container mt-4">
+        <h2 class="mb-4">Anzeigen anzeigen</h2>
+    </div>
+</body>
+</html>
