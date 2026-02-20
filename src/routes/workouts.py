@@ -4,7 +4,7 @@ workouts_bp = Blueprint("workouts", __name__, url_prefix="/workouts")
 
 
 @workouts_bp.route("/overview")
-def overview():
+def overview() -> str:
     if "user_name" not in session:
         return redirect(url_for("auth.login"))
 
@@ -12,7 +12,7 @@ def overview():
 
 
 @workouts_bp.route("/create")
-def create():
+def create() -> str:
     if "user_name" not in session:
         return redirect(url_for("auth.login"))
 
@@ -20,7 +20,7 @@ def create():
 
 
 @workouts_bp.route("/display")
-def display():
+def display() -> str:
     if "user_name" not in session:
         return redirect(url_for("auth.login"))
 
@@ -28,7 +28,7 @@ def display():
 
 
 @workouts_bp.route("/statistics")
-def statistics():
+def statistics() -> str:
     if "user_name" not in session:
         return redirect(url_for("auth.login"))
 

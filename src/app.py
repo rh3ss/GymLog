@@ -15,7 +15,7 @@ def create_app() -> Flask:
 
     return app
 
-def open_browser():
+def open_browser() -> None:
     time.sleep(1)
     webbrowser.open("http://127.0.0.1:5000")
 

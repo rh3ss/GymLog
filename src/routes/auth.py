@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, redirect, url_for, session
+from flask import Blueprint, Response, render_template, request, redirect, url_for, session
 from utils.dbclient import DBClient
 from services.userservice import UserService
 
@@ -9,12 +9,12 @@ user_service = UserService(db=db)
 
 
 @auth_bp.route("/")
-def index():
+def index() -> Response:
     return redirect(url_for("auth.login"))
 
 
 @auth_bp.route("/login", methods=["GET", "POST"])
-def login():
+def login() -> str:
     if request.method == "POST":
         email = request.form["email"]
         password = request.form["password"]
@@ -27,7 +27,7 @@ def login():
     return render_template("auth/login.html")
 
 @auth_bp.route("/register", methods=["GET", "POST"])
-def register():
+def register() -> str:
     if request.method == "POST":
         if user_service.user_exists(request.form["email"]):
             return render_template("auth/register.html", register_error=True)
@@ -41,6 +41,6 @@ def register():
     return render_template("auth/register.html")
 
 @auth_bp.route("/logout")
-def logout():
+def logout() -> Response:
     session.clear()
     return redirect(url_for("auth.login"))
