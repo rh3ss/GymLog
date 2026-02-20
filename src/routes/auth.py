@@ -1,11 +1,10 @@
-from flask import Blueprint, Response, render_template, request, redirect, url_for, session
+from flask import Blueprint, Response, render_template, request, session, redirect, url_for
 from utils.dbclient import DBClient
 from services.userservice import UserService
 
 auth_bp = Blueprint("auth", __name__)
 
-db = DBClient("gymlog.db")
-user_service = UserService(db=db)
+user_service = UserService(db=DBClient("gymlog.db"))
 
 
 @auth_bp.route("/")
@@ -21,8 +20,11 @@ def login() -> str:
         if not (user_service.user_exists(email=email) and user_service.authenticate_user(email, password)):
             return render_template("auth/login.html", login_error=True)
 
-        session["user_name"] = user_service.get_user_name(email)
-        return redirect(url_for("workouts.overview"))
+        user_data = user_service.get_user(email=email)
+        if user_data:
+            session["user_id"] = user_data["user_id"]
+            session["user_name"] = user_data["first_name"]
+            return redirect(url_for("workouts.overview"))
 
     return render_template("auth/login.html")
 

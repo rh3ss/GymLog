@@ -9,9 +9,11 @@ class DBClient:
         self._insert_defaults()
 
     def _get_connection(self) -> sqlite3.Connection:
-        return sqlite3.connect(self.db_file)
+        conn = sqlite3.connect(self.db_file)
+        conn.row_factory = sqlite3.Row
+        return conn
 
-    def _execute(self, sql: str, params: tuple = (), fetch=False, commit=False, script=False) -> list[tuple] | None:
+    def execute(self, sql: str, params: tuple = (), fetch=False, commit=False, script=False) -> list[tuple] | None:
         with self._get_connection() as conn:
             cursor = conn.cursor()
             if script:
@@ -25,11 +27,11 @@ class DBClient:
 
     def _create_tables(self) -> None:
         create_tables_sql = self._extract_sql(file_name="create_tables.sql")
-        self._execute(sql=create_tables_sql, commit=True, script=True)
+        self.execute(sql=create_tables_sql, commit=True, script=True)
 
     def _insert_defaults(self) -> None:
         insert_defaults_sql = self._extract_sql(file_name="insert_defaults.sql")
-        self._execute(sql=insert_defaults_sql, commit=True, script=True)
+        self.execute(sql=insert_defaults_sql, commit=True, script=True)
     
     def _extract_sql(self, file_name: str) -> str:
         try:
