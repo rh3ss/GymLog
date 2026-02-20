@@ -11,20 +11,17 @@ user_service = UserService(db=DBClient("gymlog.db"))
 def index() -> Response:
     return redirect(url_for("auth.login"))
 
-
 @auth_bp.route("/login", methods=["GET", "POST"])
 def login() -> str:
     if request.method == "POST":
-        email = request.form["email"]
-        password = request.form["password"]
-        if not (user_service.user_exists(email=email) and user_service.authenticate_user(email, password)):
+        if not (user_service.user_exists(email=request.form["email"]) and 
+                user_service.authenticate_user(email=request.form["email"], password=request.form["password"])):
             return render_template("auth/login.html", login_error=True)
 
-        user_data = user_service.get_user(email=email)
-        if user_data:
-            session["user_id"] = user_data["user_id"]
-            session["user_name"] = user_data["first_name"]
-            return redirect(url_for("workouts.overview"))
+        user_data = user_service.get_user(email=request.form["email"])
+        session["user_id"] = user_data["user_id"]
+        session["user_name"] = user_data["first_name"]
+        return redirect(url_for("workouts.overview"))
 
     return render_template("auth/login.html")
 
@@ -35,8 +32,12 @@ def register() -> str:
             return render_template("auth/register.html", register_error=True)
 
         user_service.create_user(
-            first_name=request.form["first_name"], last_name=request.form["last_name"], email=request.form["email"],
-            password=request.form["password"], birthdate=request.form["birthdate"], height_cm=request.form["height_cm"]
+            first_name=request.form["first_name"], 
+            last_name=request.form["last_name"], 
+            email=request.form["email"],
+            password=request.form["password"], 
+            birthdate=request.form["birthdate"], 
+            height_cm=request.form["height_cm"]
         )
         return redirect(url_for("auth.login"))
 
