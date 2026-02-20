@@ -39,9 +39,7 @@
                             <label class="form-label auth-sub-text">Trainingstyp</label>
                             <select class="form-control" name="workout_type" required>
                                 {% for wt in workout_types %}
-                                    <option value="{{ wt.workout_type_id }}">
-                                        {{ wt.name }}
-                                    </option>
+                                    <option value="{{ wt.workout_type_id }}">{{ wt.name }}</option>
                                 {% endfor %}
                             </select>
                         </div>
@@ -71,26 +69,52 @@
             </div>
         </div>
         <div class="card">
-            <div class="card-header" id="headingTwo">
-                <h5 class="mb-0">
-                    <button class="btn btn-custom btn-accordion mx-2 collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">Workoutvorlage anlegen</button>
-                </h5>
-            </div>
-            <div class="collapse" id="collapseTwo" aria-labelledby="headingTwo" data-parent="#accordion">
-            <div class="card-body">
-                Workoutvorlage anlegen Text.
-            </div>
-            </div>
-        </div>
-        <div class="card">
             <div class="card-header" id="headingThree">
             <h5 class="mb-0">
-                <button class="btn btn-custom btn-accordion mx-2 collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">Übung anlegen</button>
+                <button class="btn btn-custom btn-accordion mx-2 collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">Workoutvorlage anlegen</button>
             </h5>
             </div>
             <div class="collapse" id="collapseThree" aria-labelledby="headingThree" data-parent="#accordion">
             <div class="card-body">
                 Übung anlegen Text.
+            </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-header" id="headingTwo">
+                <h5 class="mb-0">
+                    <button class="btn btn-custom btn-accordion mx-2 collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">Übung anlegen</button>
+                </h5>
+            </div>
+            <div class="collapse" id="collapseTwo" aria-labelledby="headingTwo" data-parent="#accordion">
+            <div class="card-body">
+                <form method="POST" action="{{ url_for('workouts.add_exercise') }}">
+                    <div class="mb-3">
+                        <label class="form-label auth-sub-text">Name</label>
+                        <input type="text" name="exercise_name" class="form-control" required></input>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label auth-sub-text">Beschreibung</label>
+                        <input type="text" name="exercise_description" class="form-control"></input>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label auth-sub-text">Muskelgruppe</label>
+                        <select class="form-control" name="exercise_muscle_group" required>
+                            {% for mg in muscle_group %}
+                                <option value="{{ mg.muscle_group_id }}">{{ mg.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label auth-sub-text">Equipment</label>
+                        <select class="form-control" name="exercise_equipment" required>
+                            {% for eq in equipment %}
+                                <option value="{{ eq.equipment_id }}">{{ eq.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-custom btn-login auth-sub-text">Speichern</button>
+                </form>
             </div>
             </div>
         </div>

@@ -12,8 +12,16 @@ def overview() -> str:
 
 @workouts_bp.route("/create")
 def create() -> str:
-    workout_types = workout_service.get_workout_type()
-    return render_template("workouts/create.html", user_name=session["user_name"], workout_types=workout_types)
+    workout_types = workout_service.get_workout_types()
+    muscle_group = workout_service.get_muscle_groups()
+    equipment = workout_service.get_equipment()
+    return render_template(
+        "workouts/create.html", 
+        user_name=session["user_name"], 
+        workout_types=workout_types,
+        muscle_group=muscle_group,
+        equipment=equipment
+    )
 
 @workouts_bp.route("/display")
 def display() -> str:
@@ -23,7 +31,7 @@ def display() -> str:
 def statistics() -> str:
     return render_template("workouts/statistics.html", user_name=session["user_name"])
 
-@workouts_bp.route("/add", methods=["GET", "POST"])
+@workouts_bp.route("/add_workout", methods=["GET", "POST"])
 def add_workout() -> str:
     if request.method == "POST":
         workout_service.create_workout(
@@ -35,7 +43,17 @@ def add_workout() -> str:
             workout_calories=request.form.get("workout_calories"), 
             workout_note=request.form.get("workout_note")
         )
-        return
 
     return render_template("workouts/create.html", user_name=session["user_name"])
 
+@workouts_bp.route("/add_exercise", methods=["GET", "POST"])
+def add_exercise() -> str:
+    if request.method == "POST":
+        workout_service.create_exercise(
+            equipment_id=request.form.get("exercise_equipment"),
+            muscle_group_id=request.form.get("exercise_muscle_group"),
+            name=request.form.get("exercise_name"),
+            description=request.form.get("exercise_description")
+        )
+
+    return render_template("workouts/create.html", user_name=session["user_name"])
