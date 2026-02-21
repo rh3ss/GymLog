@@ -42,7 +42,6 @@ CREATE TABLE IF NOT EXISTS workout_template (
     workout_template_id INTEGER NOT NULL,
     user_id INTEGER NOT NULL,
     name TEXT NOT NULL,
-    description TEXT,
     PRIMARY KEY (workout_template_id),
     FOREIGN KEY (user_id) REFERENCES user(user_id)
 );
@@ -61,6 +60,7 @@ CREATE TABLE IF NOT EXISTS workout (
     workout_id INTEGER NOT NULL,
     user_id INTEGER NOT NULL,
     workout_type_id INTEGER NOT NULL,
+    name TEXT NOT NULL,
     date DATE NOT NULL,
     start_time TIME,
     end_time TIME,

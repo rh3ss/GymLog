@@ -18,29 +18,31 @@
                     <form method="POST">
                         <div class="mb-3">
                             <label class="form-label auth-sub-text">Vorname</label>
-                            <input type="text" name="first_name" class="form-control" value="{{ request.form.get('first_name', '') }}" required>
+                            <input type="text" name="first_name" class="form-control" value="{{ request.form.get('first_name', '') }}" required></input>
                         </div>
                         <div class="mb-3">
                             <label class="form-label auth-sub-text">Nachname</label>
-                            <input type="text" name="last_name" class="form-control" value="{{ request.form.get('last_name', '') }}" required>
+                            <input type="text" name="last_name" class="form-control" value="{{ request.form.get('last_name', '') }}" required></input>
                         </div>
                         <div class="mb-3">
                             <label class="form-label auth-sub-text">E-Mail</label>
-                            <input type="email" name="email" class="form-control {% if register_error %}is-invalid{% endif %}" required>
+                            <input type="email" name="email" class="form-control {% if register_error %}is-invalid{% endif %}" required></input>
                         </div>
                         <div class="mb-3">
                             <label class="form-label auth-sub-text">Passwort</label>
-                            <input type="password" name="password" class="form-control {% if register_error %}is-invalid{% endif %}" required>
+                            <input type="password" name="password" class="form-control {% if register_error %}is-invalid{% endif %}" required></input>
                         </div>
                         <div class="mb-3">
                             <label class="form-label auth-sub-text">Geburtsdatum</label>
-                            <input type="date" name="birthdate" class="form-control" value="{{ request.form.get('birthdate', '') }}" required>
+                            <input type="date" name="birthdate" class="form-control" value="{{ request.form.get('birthdate', '') }}" required></input>
                         </div>
                         <div class="mb-3">
                             <label class="form-label auth-sub-text">Größe (cm)</label>
-                            <input type="number" name="height_cm" class="form-control" value="{{ request.form.get('height_cm', '') }}" required>
+                            <input type="number" name="height_cm" class="form-control" value="{{ request.form.get('height_cm', '') }}" required></input>
                         </div>
-                        {% if register_error %}<div class="text-danger mb-3 auth-sub-text">E-Mail Adresse existiert bereits</div>{% endif %}
+                        {% if register_error %}
+                            <div class="text-danger mb-3 auth-sub-text">E-Mail Adresse existiert bereits</div>
+                        {% endif %}
                         <button type="submit" class="btn btn-custom btn-register auth-sub-text">Registrieren</button>
                     </form>
                     <div class="text-center mt-3">

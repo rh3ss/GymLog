@@ -36,7 +36,8 @@ def add_workout() -> str:
     if request.method == "POST":
         workout_service.create_workout(
             user_id=session["user_id"], 
-            workout_type_id=request.form.get("workout_type"), 
+            workout_type_id=request.form.get("workout_type"),
+            workout_name=request.form.get("workout_name"),
             workout_date=request.form.get("workout_date"), 
             workout_start_time=request.form.get("workout_start_time"),
             workout_end_time=request.form.get("workout_end_time"), 

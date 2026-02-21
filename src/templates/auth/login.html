@@ -16,13 +16,15 @@
                     <form method="POST">
                         <div class="mb-3">
                             <label class="form-label auth-sub-text">E-Mail</label>
-                            <input type="email" name="email" class="form-control {% if login_error %}is-invalid{% endif %}" required>
+                            <input type="email" name="email" class="form-control {% if login_error %}is-invalid{% endif %}" required></input>
                         </div>
                         <div class="mb-3">
                             <label class="form-label auth-sub-text">Passwort</label>
-                            <input type="password" name="password" class="form-control {% if login_error %}is-invalid{% endif %}" required>
+                            <input type="password" name="password" class="form-control {% if login_error %}is-invalid{% endif %}" required></input>
                         </div>
-                        {% if login_error %}<div class="text-danger mb-3 auth-sub-text">Falsche Login-Daten</div>{% endif %}
+                        {% if login_error %}
+                            <div class="text-danger mb-3 auth-sub-text">Falsche Login-Daten</div>
+                        {% endif %}
                         <button type="submit" class="btn btn-custom btn-login auth-sub-text">Einloggen</button>
                     </form>
                     <div class="text-center mt-3">
