@@ -1,11 +1,5 @@
-from flask import Blueprint, Response, render_template, request, session, redirect, url_for
-from utils.dbclient import DBClient
-from services.userservice import UserService
-
-auth_bp = Blueprint("auth", __name__)
-
-user_service = UserService(db=DBClient("gymlog.db"))
-
+from flask import Response, render_template, request, session, redirect, url_for
+from .config import user_service, auth_bp
 
 @auth_bp.route("/")
 def index() -> Response:
@@ -21,7 +15,7 @@ def login() -> str:
         user_data = user_service.get_user(email=request.form["email"])
         session["user_id"] = user_data["user_id"]
         session["user_name"] = user_data["first_name"]
-        return redirect(url_for("workouts.overview"))
+        return redirect(url_for("pages.overview"))
 
     return render_template("auth/login.html")
 

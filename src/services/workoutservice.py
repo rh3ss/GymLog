@@ -14,11 +14,16 @@ class WorkoutService:
     def get_equipment(self) -> list[tuple]:
         return self.db.execute("SELECT equipment_id, name FROM equipment ORDER BY name", fetch=True)
 
-    def create_workout(self, user_id: int, workout_type_id: int, workout_name: str, workout_date: date, workout_start_time: time, workout_end_time: time, workout_calories: float, workout_note: str) -> None:
-        self.db.execute(
+    def get_exercises(self) -> list[tuple]:
+        return self.db.execute("SELECT exercise_id, equipment_id, muscle_group_id, name, description FROM exercise ORDER BY name", fetch=True)
+
+    def create_workout(self, user_id: int, workout_type_id: int, workout_name: str, workout_date: date, workout_start_time: time, workout_end_time: time, workout_calories: float, workout_note: str) -> int:
+        inserted_workout_id = self.db.execute(
             "INSERT INTO workout (user_id, workout_type_id, name, date, start_time, end_time, calories_burned, note) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
-            (user_id, workout_type_id, workout_name, workout_date, workout_start_time or None, workout_end_time or None, workout_calories or None, workout_note or None), commit=True
+            (user_id, workout_type_id, workout_name, workout_date, workout_start_time or None, workout_end_time or None, workout_calories or None, workout_note or None), 
+            commit=True, return_lastrowid=True
         )
+        return inserted_workout_id
 
     def create_exercise(self, equipment_id: int, muscle_group_id: int, name: str, description: str) -> None:
         self.db.execute(

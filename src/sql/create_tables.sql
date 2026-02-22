@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS exercise (
     exercise_id INTEGER NOT NULL,
     equipment_id INTEGER NOT NULL,
     muscle_group_id INTEGER NOT NULL,
-    name TEXT NOT NULL,
+    name TEXT NOT NULL UNIQUE,
     description TEXT,
     PRIMARY KEY (exercise_id),
     FOREIGN KEY (equipment_id) REFERENCES equipment(equipment_id),

@@ -11,19 +11,24 @@ class DBClient:
     def _get_connection(self) -> sqlite3.Connection:
         conn = sqlite3.connect(self.db_file)
         conn.row_factory = sqlite3.Row
+        conn.text_factory = str
         return conn
 
-    def execute(self, sql: str, params: tuple = (), fetch=False, commit=False, script=False) -> list[tuple] | None:
+    def execute(self, sql: str, params: tuple = (), fetch=False, commit=False, script=False, return_lastrowid=False) -> list[tuple] | int | None:
         with self._get_connection() as conn:
             cursor = conn.cursor()
+            result = None
             if script:
                 cursor.executescript(sql)
             else:
                 cursor.execute(sql, params)
                 if fetch:
-                    return cursor.fetchall()
+                    result = cursor.fetchall()
+                elif return_lastrowid:
+                    result = cursor.lastrowid
             if commit:
                 conn.commit()
+            return result
 
     def _create_tables(self) -> None:
         create_tables_sql = self._extract_sql(file_name="create_tables.sql")

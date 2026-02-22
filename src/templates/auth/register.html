@@ -14,39 +14,39 @@
         <div class="col-md-4">
             <div class="card shadow">
                 <div class="card-body">
-                    <h3 class="text-center mb-4 auth-text">Registrieren</h3>
+                    <h3 class="text-center mb-4 header-text">Registrieren</h3>
                     <form method="POST">
                         <div class="mb-3">
-                            <label class="form-label auth-sub-text">Vorname</label>
+                            <label class="form-label sub-text">Vorname</label>
                             <input type="text" name="first_name" class="form-control" value="{{ request.form.get('first_name', '') }}" required></input>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label auth-sub-text">Nachname</label>
+                            <label class="form-label sub-text">Nachname</label>
                             <input type="text" name="last_name" class="form-control" value="{{ request.form.get('last_name', '') }}" required></input>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label auth-sub-text">E-Mail</label>
+                            <label class="form-label sub-text">E-Mail</label>
                             <input type="email" name="email" class="form-control {% if register_error %}is-invalid{% endif %}" required></input>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label auth-sub-text">Passwort</label>
+                            <label class="form-label sub-text">Passwort</label>
                             <input type="password" name="password" class="form-control {% if register_error %}is-invalid{% endif %}" required></input>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label auth-sub-text">Geburtsdatum</label>
+                            <label class="form-label sub-text">Geburtsdatum</label>
                             <input type="date" name="birthdate" class="form-control" value="{{ request.form.get('birthdate', '') }}" required></input>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label auth-sub-text">Größe (cm)</label>
+                            <label class="form-label sub-text">Größe (cm)</label>
                             <input type="number" name="height_cm" class="form-control" value="{{ request.form.get('height_cm', '') }}" required></input>
                         </div>
                         {% if register_error %}
-                            <div class="text-danger mb-3 auth-sub-text">E-Mail Adresse existiert bereits</div>
+                            <div class="text-danger mb-3 sub-text">E-Mail Adresse existiert bereits</div>
                         {% endif %}
-                        <button type="submit" class="btn btn-custom btn-register auth-sub-text">Registrieren</button>
+                        <button type="submit" class="btn btn-custom btn-register sub-text">Registrieren</button>
                     </form>
                     <div class="text-center mt-3">
-                        <a href="{{ url_for('auth.login') }}" class="link auth-sub-text">Login</a>
+                        <a href="{{ url_for('auth.login') }}" class="link sub-text">Login</a>
                     </div>
                 </div>
             </div>

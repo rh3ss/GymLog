@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta3/dist/css/bootstrap-select.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="bg-light">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark position-relative">
+        <div class="container-fluid d-flex justify-content-end align-items-center">
+            <div class="d-flex align-items-center gap-3">
+                <span class="text-white sub-text">Hallo {{ user_name }}</span>
+                <a href="{{ url_for('auth.logout') }}" class="btn btn-custom btn-logout">Logout</a>
+            </div>
+        </div>
+        <div class="position-absolute top-50 start-50 translate-middle d-flex align-items-center">
+            <span class="navbar-brand nav-text mb-0">GymLog</span>
+            <img src="{{ url_for('static', filename='img/logo.png') }}" alt="GymLog Logo" class="nav-logo">
+        </div>
+    </nav>
+    <div class="container mt-5">
+        <div class="d-flex justify-content-center mt-4">
+            <a href="{{ url_for('pages.overview') }}" class="btn btn-custom btn-switch mx-2">Übersicht</a>
+            <a href="{{ url_for('pages.create') }}" class="btn btn-custom btn-switch mx-2">Anlegen</a>
+            <a href="{{ url_for('pages.display') }}" class="btn btn-custom btn-switch mx-2">Anzeigen</a>
+            <a href="{{ url_for('pages.statistics') }}" class="btn btn-custom btn-switch mx-2">Statistik</a>
+        </div>
+        <div id="accordion">
+        <div class="card">
+            <div class="card-header" id="headingOne">
+                <h5 class="mb-0">
+                    <button class="btn btn-custom btn-accordion mx-2" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">Workout anlegen</button>
+                </h5>
+            </div>
+            <div class="collapse" id="collapseOne" aria-labelledby="headingOne" data-bs-parent="#accordion">
+                <div class="card-body">
+                    <form method="POST" action="{{ url_for('workouts.add_workout') }}">
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <label class="form-label sub-text">Name</label>
+                                <input type="text" name="workout_name" class="form-control" required></input>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label sub-text">Trainingstyp</label>
+                                <select class="form-control" name="workout_type" required>
+                                    {% for wt in workout_types %}
+                                        <option value="{{ wt.workout_type_id }}">{{ wt.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label sub-text">Kalorienverbrauch</label>
+                                <input type="number" name="workout_calories" class="form-control"></input>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <label class="form-label sub-text">Datum</label>
+                                <input type="date" name="workout_date" class="form-control" required></input>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label sub-text">Startzeit</label>
+                                <input type="time" name="workout_start_time" class="form-control"></input>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label sub-text">Endzeit</label>
+                                <input type="time" name="workout_end_time" class="form-control"></input>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label sub-text">Notiz</label>
+                            <textarea type="text" name="workout_note" class="form-control" rows="2"></textarea>
+                        </div>
+                        <div class="card mb-3">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <span class="form-label sub-text">Übungen</span>
+                                <button type="button" class="btn btn-custom btn-workout-exercise" onclick="addExercise()">+</button>
+                            </div>
+                            <div class="card-body" id="exercise_container"></div>
+                        </div>
+                        <button type="submit" class="btn btn-custom btn-login sub-text">Speichern</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-header" id="headingThree">
+            <h5 class="mb-0">
+                <button class="btn btn-custom btn-accordion mx-2 collapsed" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">Workoutvorlage anlegen</button>
+            </h5>
+            </div>
+            <div class="collapse" id="collapseThree" aria-labelledby="headingThree" data-bs-parent="#accordion">
+            <div class="card-body">
+                Übung anlegen Text.
+            </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-header" id="headingTwo">
+                <h5 class="mb-0">
+                    <button class="btn btn-custom btn-accordion mx-2 collapsed" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">Übung anlegen</button>
+                </h5>
+            </div>
+            <div class="collapse" id="collapseTwo" aria-labelledby="headingTwo" data-bs-parent="#accordion">
+            <div class="card-body">
+                <form method="POST" action="{{ url_for('workouts.add_exercise') }}">
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <label class="form-label sub-text">Name</label>
+                            <input type="text" name="exercise_name" class="form-control" required></input>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label sub-text">Muskelgruppe</label>
+                            <select class="form-control" name="exercise_muscle_group" required>
+                                {% for mg in muscle_group %}
+                                    <option value="{{ mg.muscle_group_id }}">{{ mg.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label sub-text">Equipment</label>
+                            <select class="form-control" name="exercise_equipment" required>
+                                {% for eq in equipment %}
+                                    <option value="{{ eq.equipment_id }}">{{ eq.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label sub-text">Beschreibung</label>
+                        <textarea type="text" name="exercise_description" class="form-control" rows="1"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-custom btn-login sub-text">Speichern</button>
+                </form>
+            </div>
+            </div>
+        </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta3/dist/js/bootstrap-select.min.js"></script>
+
+    <script>
+    let exerciseIndex = 0;
+    function addExercise() {
+        let container = $("#exercise_container");
+        let newCard = $(`
+            <div class="card mb-3 exerciseCard">
+                <div class="card-body">
+                    <div class="row align-items-start g-2">
+                        <div class="col-md-6">
+                            <select class="form-control selectpicker" data-live-search="true" name="workout_exercises[]">
+                                {% for ex in exercises %}
+                                    <option value="{{ ex.exercise_id }}" data-muscle-group-id="{{ ex.muscle_group_id }}" data-equipment-id="{{ ex.equipment_id }}" data-description="{{ ex.description }}">
+                                        {{ ex.name }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <input type="text" class="form-control" name="muscle_group[]" readonly placeholder="Muskelgruppe">
+                        </div>
+                        <div class="col-md-2">
+                            <input type="text" class="form-control" name="equipment[]" readonly placeholder="Equipment">
+                        </div>
+                        <div class="col-md-2 d-flex align-items-center justify-content-center">
+                            <button type="button" class="btn btn-workout-exercise" onclick="removeExercise(this)">-</button>
+                        </div>
+                        <div class="col-md-12 mt-2">
+                            <small class="form-text description-text"></small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `);
+        container.append(newCard);
+        newCard.find('.selectpicker').selectpicker();
+        newCard.find('select.selectpicker').on('changed.bs.select', function() {
+            let selected = $(this).find('option:selected');
+            let muscleGroup = selected.data('muscle-group-id') || '';
+            let equipment = selected.data('equipment-id') || '';
+            let description = selected.data('description') || '';
+
+            newCard.find('input[name="muscle_group[]"]').val(muscleGroup);
+            newCard.find('input[name="equipment[]"]').val(equipment);
+            newCard.find('.description-text').text(description);
+        });
+    }
+
+    function removeExercise(button) {
+        button.closest(".exerciseCard").remove();
+    }
+
+    </script>
+</body>
+</html>
