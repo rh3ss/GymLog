@@ -41,7 +41,7 @@ class DBClient:
     def _extract_sql(self, file_name: str) -> str:
         try:
             path = Path("src/sql") / file_name
-            with open(path) as file:
+            with open(path, encoding="utf-8") as file:
                 sql = file.read()
             return sql
         except Exception as e:

@@ -4,12 +4,11 @@ from .config import workout_service, workouts_bp
 @workouts_bp.route("/add_workout", methods=["POST"])
 def add_workout() -> str:
     if request.method == "POST":
-        exercise_ids = request.form.getlist("workout_exercises[]")
-        workout_id = _create_workout_get_id()
+        _create_exercises(workout_id=_create_workout())
 
     return redirect(url_for("pages.create"))
 
-def _create_workout_get_id() -> int:
+def _create_workout() -> int:
     return workout_service.create_workout(
         user_id=session["user_id"], 
         workout_type_id=request.form.get("workout_type"),
@@ -20,3 +19,22 @@ def _create_workout_get_id() -> int:
         workout_calories=request.form.get("workout_calories"), 
         workout_note=request.form.get("workout_note")
     )
+
+def _create_exercises(workout_id: int) -> None:
+    exercises = request.form.getlist("workout_exercises[]")
+    form_data = request.form.to_dict(flat=False)
+
+    for index, exercise_id in enumerate(exercises):
+        exercise_workout_id = workout_service.create_exercise_workout(workout_id=workout_id, exercise_id=exercise_id)
+        _create_exercise_sets(form_data=form_data, index=index, exercise_workout_id=exercise_workout_id)
+
+def _create_exercise_sets(form_data: dict[str, list[str]], index: int, exercise_workout_id: int) -> None:
+    weights = form_data.get(f"sets[{index}][weight][]", [])
+    reps = form_data.get(f"sets[{index}][reps][]", [])
+    for index, set_number in enumerate(range(1, len(reps) + 1)):
+        workout_service.create_set(
+            exercise_workout_id=exercise_workout_id, 
+            set_number=set_number, 
+            weight=weights[index], 
+            repetitions=reps[index]
+        )
