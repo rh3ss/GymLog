@@ -26,9 +26,25 @@
             <a href="{{ url_for('pages.display') }}" class="btn btn-custom btn-switch mx-2">Anzeigen</a>
             <a href="{{ url_for('pages.statistics') }}" class="btn btn-custom btn-switch mx-2">Statistik</a>
         </div>
+        <form method="GET" id="date-filtering">
+            <div class="row mb-4 justify-content-center align-items-center gx-4 py-2">
+                <div class="col-md-3 d-flex align-items-center mb-2 px-3">
+                    <label class="form-label sub-text me-3 mb-0" for="filter_start_date">Von</label>
+                    <input type="date" name="filter_start_date" class="form-control auto-submit" value="{{ value_filter_start_date }}" required>
+                </div>
+                <div class="col-md-3 d-flex align-items-center mb-2 px-3">
+                    <label class="form-label sub-text me-3 mb-0" for="filter_end_date">Bis</label>
+                    <input type="date" name="filter_end_date" class="form-control auto-submit" value="{{ value_filter_end_date }}" required>
+                </div>
+            </div>
+        </form>
     </div>
-	    <div class="container mt-4">
-        <h2 class="mb-4">Anzeigen anzeigen</h2>
-    </div>
+    <script>
+    document.querySelectorAll(".auto-submit").forEach(input => {
+        input.addEventListener("change", function() {
+            document.getElementById("date-filtering").submit();
+        });
+    });
+    </script>
 </body>
 </html>

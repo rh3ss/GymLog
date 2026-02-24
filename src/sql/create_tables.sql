@@ -47,11 +47,11 @@ CREATE TABLE IF NOT EXISTS workout_template (
 );
 
 CREATE TABLE IF NOT EXISTS exercise_workout_template (
-    id INTEGER NOT NULL,
+    exercise_workout_template_id INTEGER NOT NULL,
     workout_template_id INTEGER NOT NULL,
     exercise_id INTEGER NOT NULL,
     order_number INTEGER NOT NULL,
-    PRIMARY KEY (id),
+    PRIMARY KEY (exercise_workout_template_id),
     FOREIGN KEY (workout_template_id) REFERENCES workout_template(workout_template_id),
     FOREIGN KEY (exercise_id) REFERENCES exercise(exercise_id)
 );
@@ -72,20 +72,20 @@ CREATE TABLE IF NOT EXISTS workout (
 );
 
 CREATE TABLE IF NOT EXISTS exercise_workout (
-    id INTEGER NOT NULL,
+    exercise_workout_id INTEGER NOT NULL,
     workout_id INTEGER NOT NULL,
     exercise_id INTEGER NOT NULL,
-    PRIMARY KEY (id),
+    PRIMARY KEY (exercise_workout_id),
     FOREIGN KEY (workout_id) REFERENCES workout(workout_id),
     FOREIGN KEY (exercise_id) REFERENCES exercise(exercise_id)
 );
 
 CREATE TABLE IF NOT EXISTS set_entry (
-    set_id INTEGER NOT NULL,
+    set_entry_id INTEGER NOT NULL,
     exercise_workout_id INTEGER NOT NULL,
     set_number INTEGER NOT NULL,
     weight NUMERIC(4,2) NOT NULL,
     repetitions INTEGER NOT NULL,
-    PRIMARY KEY (set_id),
-    FOREIGN KEY (exercise_workout_id) REFERENCES exercise_workout(id)
+    PRIMARY KEY (set_entry_id),
+    FOREIGN KEY (exercise_workout_id) REFERENCES exercise_workout(exercise_workout_id)
 );

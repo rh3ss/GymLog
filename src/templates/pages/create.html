@@ -149,7 +149,7 @@
         let index = exercise_index++;
         let container = $("#exercise_container");
         let new_card = $(`
-            <div class="card mb-3 exerciseCard" data-index="${index}">
+            <div class="card mb-3 exercise-card" data-index="${index}">
                 <div class="card-body">
                     <div class="row align-items-start g-2">
                         <div class="col-md-5">
@@ -192,20 +192,25 @@
         container.append(new_card);
         new_card.find('.selectpicker').selectpicker();
         new_card.find('select.selectpicker').on('changed.bs.select', function() {
-            let selected = $(this).find('option:selected');
+            updateExerciseData($(this));
+        });
+        updateExerciseData(new_card.find('select.selectpicker'));
+        function updateExerciseData(selectElement) {
+            let selected = selectElement.find('option:selected');
             let muscle_group = selected.data('muscle-group-id') || '';
             let equipment = selected.data('equipment-id') || '';
             let description = selected.data('description') || '';
 
-            new_card.find('input[name="muscle_group[]"]').val(muscle_group);
-            new_card.find('input[name="equipment[]"]').val(equipment);
-            new_card.find('.description-text').text(description);
-        });
+            let card = selectElement.closest('.exercise-card');
+            card.find('input[name="muscle_group[]"]').val(muscle_group);
+            card.find('input[name="equipment[]"]').val(equipment);
+            card.find('.description-text').text(description);
+        }
         addSet(index);
     }
 
     function addSet(exercise_index) {
-        let container = $(`.exerciseCard[data-index="${exercise_index}"]`).find('.sets-container');
+        let container = $(`.exercise-card[data-index="${exercise_index}"]`).find('.sets-container');
         let new_set = $(`
             <div class="card mb-2 setCard"> 
                 <div class="card-body"> 
@@ -228,7 +233,7 @@
     }
 
     function removeExercise(button) {
-        button.closest(".exerciseCard").remove();
+        button.closest(".exercise-card").remove();
     }
 
     function removeSet(button){

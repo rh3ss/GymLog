@@ -1,3 +1,4 @@
+from datetime import datetime
 from flask import request, session, redirect, url_for
 from .config import workout_service, workouts_bp
 
@@ -9,11 +10,13 @@ def add_workout() -> str:
     return redirect(url_for("pages.create"))
 
 def _create_workout() -> int:
+    workout_date_str = request.form.get("workout_date")
+    workout_date_obj = datetime.strptime(workout_date_str, "%Y-%m-%d").date()
     return workout_service.create_workout(
         user_id=session["user_id"], 
         workout_type_id=request.form.get("workout_type"),
         workout_name=request.form.get("workout_name"),
-        workout_date=request.form.get("workout_date"), 
+        workout_date=workout_date_obj, 
         workout_start_time=request.form.get("workout_start_time"),
         workout_end_time=request.form.get("workout_end_time"), 
         workout_calories=request.form.get("workout_calories"), 

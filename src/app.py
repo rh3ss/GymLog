@@ -2,6 +2,7 @@ from flask import Flask
 import threading
 import webbrowser
 import time
+import socket
 
 from routes.config import auth_bp, pages_bp, workouts_bp
 
@@ -15,11 +16,19 @@ def create_app() -> Flask:
 
     return app
 
-def open_browser() -> None:
-    time.sleep(1)
+def wait_for_server(host="127.0.0.1", port=5000):
+    while True:
+        try:
+            with socket.create_connection((host, port), timeout=1):
+                return
+        except OSError:
+            time.sleep(0.2)
+
+def open_browser():
+    wait_for_server()
     webbrowser.open("http://127.0.0.1:5000")
 
 if __name__ == "__main__":
-    threading.Thread(target=open_browser).start()
     app = create_app()
+    threading.Thread(target=open_browser).start()
     app.run(host="127.0.0.1", port=5000, debug=False)
