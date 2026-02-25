@@ -31,14 +31,14 @@ class DBClient:
             return result
 
     def _create_tables(self) -> None:
-        create_tables_sql = self._extract_sql(file_name="create_tables.sql")
+        create_tables_sql = self.extract_sql(file_name="create_tables.sql")
         self.execute(sql=create_tables_sql, commit=True, script=True)
 
     def _insert_defaults(self) -> None:
-        insert_defaults_sql = self._extract_sql(file_name="insert_defaults.sql")
+        insert_defaults_sql = self.extract_sql(file_name="insert_defaults.sql")
         self.execute(sql=insert_defaults_sql, commit=True, script=True)
     
-    def _extract_sql(self, file_name: str) -> str:
+    def extract_sql(self, file_name: str) -> str:
         try:
             path = Path("src/sql") / file_name
             with open(path, encoding="utf-8") as file:

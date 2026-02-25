@@ -15,30 +15,20 @@ class WorkoutService:
         return self.db.execute("SELECT equipment_id, name FROM equipment ORDER BY name", fetch=True)
 
     def get_exercises(self) -> list[tuple]:
-        return self.db.execute("""
-            SELECT ex.exercise_id AS exercise_id, eq.name AS equipment_name, mg.name AS muscle_group_name, ex.name AS exercise_name, ex.description AS exercise_description
-            FROM exercise ex
-            INNER JOIN equipment eq USING(equipment_id)
-            INNER JOIN muscle_group mg USING(muscle_group_id)
-            ORDER BY ex.name; 
-            """, fetch=True
-        )
+        sql = self.db.extract_sql(file_name="extract_exercises.sql")
+        return self.db.execute(sql=sql, fetch=True)
     
     def get_workouts(self, user_id: int, filter_start_day: date, filter_end_day: date) -> list[tuple]:
-        return self.db.execute("""
-            SELECT workout_id, user_id, workout_type_id, name, date, start_time, end_time, calories_burned, note
-            FROM workout
-            WHERE user_id = ? AND date BETWEEN ? AND ?
-            ORDER BY date DESC; """, 
-            (user_id, filter_start_day.isoformat(), filter_end_day.isoformat()), fetch=True
-        )
+        sql = self.db.extract_sql(file_name="extract_workouts.sql")
+        return self.db.execute(sql=sql, params=(user_id, filter_start_day.isoformat(), filter_end_day.isoformat()), fetch=True)
     
     def get_exercises_workouts(self, list_workout_ids: list) -> list[tuple]:
-        if not list_workout_ids:
-            return []
-        placeholders = ", ".join("?" for _ in list_workout_ids)
-        sql = f"SELECT exercise_workout_id, workout_id, exercise_id FROM exercise_workout WHERE workout_id IN ({placeholders})"
-        return self.db.execute(sql, list_workout_ids, fetch=True)
+        sql = self.db.extract_sql(file_name="extract_exercises_workouts_by_workout_ids.sql").format(placeholders=", ".join("?" for _ in list_workout_ids))
+        return self.db.execute(sql=sql, params=list_workout_ids, fetch=True)
+
+    def get_sets(self, list_exercise_workout_ids: list) -> list[tuple]:
+        sql = self.db.extract_sql(file_name="extract_sets_by_exercise_workout_ids.sql").format(placeholders=", ".join("?" for _ in list_exercise_workout_ids))
+        return self.db.execute(sql=sql, params=list_exercise_workout_ids, fetch=True)
 
     def create_workout(self, user_id: int, workout_type_id: int, workout_name: str, workout_date: date, workout_start_time: time, workout_end_time: time, workout_calories: float, workout_note: str) -> int:
         inserted_workout_id = self.db.execute(

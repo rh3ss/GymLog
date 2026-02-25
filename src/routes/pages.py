@@ -33,6 +33,8 @@ def display() -> str:
     exercises = workout_service.get_exercises()
     workout_ids = [w["workout_id"] for w in workouts]
     exercises_workouts = workout_service.get_exercises_workouts(list_workout_ids=workout_ids)
+    exercise_workout_ids = [ew["exercise_workout_id"] for ew in exercises_workouts]
+    sets = workout_service.get_sets(list_exercise_workout_ids=exercise_workout_ids)
     return render_template(
         "pages/display.html", 
         user_name=session["user_name"],
@@ -40,7 +42,8 @@ def display() -> str:
         value_filter_end_date=value_filter_end_date,
         workouts=workouts,
         exercises=exercises,
-        exercises_workouts=exercises_workouts
+        exercises_workouts=exercises_workouts,
+        sets=sets
     )
 
 @pages_bp.route("/statistics")
