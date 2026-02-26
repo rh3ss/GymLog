@@ -1,5 +1,5 @@
 from flask import Response, render_template, request, session, redirect, url_for
-from .config import user_service, auth_bp
+from ..config import user_service, auth_bp
 
 
 @auth_bp.route("/")
@@ -21,7 +21,7 @@ def login() -> str:
         user_data = user_service.get_user(email=request.form["email"])
         session["user_id"] = user_data["user_id"]
         session["user_name"] = user_data["first_name"]
-        return redirect(url_for("pages.overview"))
+        return redirect(url_for("pages.overview_page"))
 
     return render_template("auth/login.html")
 

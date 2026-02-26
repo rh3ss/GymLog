@@ -1,6 +1,6 @@
 from datetime import datetime
 from flask import request, session, redirect, url_for
-from .config import workout_service, workouts_bp
+from ..config import workout_service, workouts_bp
 
 
 @workouts_bp.route("/add_workout", methods=["POST"])
@@ -8,7 +8,7 @@ def add_workout() -> str:
     if request.method == "POST":
         _create_exercises(workout_id=_create_workout())
 
-    return redirect(url_for("pages.create"))
+    return redirect(url_for("pages.create_page"))
 
 
 def _create_workout() -> int:

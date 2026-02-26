@@ -11,7 +11,6 @@ auth_bp = Blueprint("auth", __name__)
 pages_bp = Blueprint("pages", __name__)
 workouts_bp = Blueprint("workouts", __name__)
 
-from . import auth
-from . import pages
-from . import add_workout
-from . import add_exercise
+from .auth import auth
+from .pages import pages
+from .workouts import add_workout, add_exercise

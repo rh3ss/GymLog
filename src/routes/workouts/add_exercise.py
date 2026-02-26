@@ -1,5 +1,5 @@
 from flask import request, redirect, url_for
-from .config import workout_service, workouts_bp
+from ..config import workout_service, workouts_bp
 
 
 @workouts_bp.route("/add_exercise", methods=["POST"])
@@ -12,4 +12,4 @@ def add_exercise() -> str:
             description=request.form.get("exercise_description"),
         )
 
-    return redirect(url_for("pages.create"))
+    return redirect(url_for("pages.create_page"))
