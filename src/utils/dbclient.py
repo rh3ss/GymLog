@@ -1,6 +1,7 @@
 import sqlite3
 from pathlib import Path
 
+
 class DBClient:
     def __init__(self, file_path: str) -> None:
         self.db_file = Path("src/data") / file_path
@@ -14,7 +15,15 @@ class DBClient:
         conn.text_factory = str
         return conn
 
-    def execute(self, sql: str, params: tuple = (), fetch=False, commit=False, script=False, return_lastrowid=False) -> list[tuple] | int | None:
+    def execute(
+        self,
+        sql: str,
+        params: tuple = (),
+        fetch=False,
+        commit=False,
+        script=False,
+        return_lastrowid=False,
+    ) -> list[tuple] | int | None:
         with self._get_connection() as conn:
             cursor = conn.cursor()
             result = None
@@ -37,7 +46,7 @@ class DBClient:
     def _insert_defaults(self) -> None:
         insert_defaults_sql = self.extract_sql(file_name="insert_defaults.sql")
         self.execute(sql=insert_defaults_sql, commit=True, script=True)
-    
+
     def extract_sql(self, file_name: str) -> str:
         try:
             path = Path("src/sql") / file_name

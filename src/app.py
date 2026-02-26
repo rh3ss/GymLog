@@ -6,6 +6,7 @@ import socket
 
 from routes.config import auth_bp, pages_bp, workouts_bp
 
+
 def create_app() -> Flask:
     app = Flask(__name__)
     app.secret_key = "SECRET_KEY"
@@ -16,6 +17,7 @@ def create_app() -> Flask:
 
     return app
 
+
 def wait_for_server(host="127.0.0.1", port=5000):
     while True:
         try:
@@ -24,9 +26,11 @@ def wait_for_server(host="127.0.0.1", port=5000):
         except OSError:
             time.sleep(0.2)
 
+
 def open_browser():
     wait_for_server()
     webbrowser.open("http://127.0.0.1:5000")
+
 
 if __name__ == "__main__":
     app = create_app()

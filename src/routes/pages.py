@@ -5,12 +5,11 @@ from .config import workout_service, pages_bp
 value_filter_end_date = date.today()
 value_filter_start_date = value_filter_end_date - timedelta(days=7)
 
+
 @pages_bp.route("/overview")
 def overview() -> str:
-    return render_template(
-        "pages/overview.html", 
-        user_name=session["user_name"]
-    )
+    return render_template("pages/overview.html", user_name=session["user_name"])
+
 
 @pages_bp.route("/create")
 def create() -> str:
@@ -19,39 +18,41 @@ def create() -> str:
     equipment = workout_service.get_equipment()
     exercises = workout_service.get_exercises()
     return render_template(
-        "pages/create.html", 
-        user_name=session["user_name"], 
+        "pages/create.html",
+        user_name=session["user_name"],
         workout_types=workout_types,
         muscle_group=muscle_group,
         equipment=equipment,
-        exercises=exercises
+        exercises=exercises,
     )
+
 
 @pages_bp.route("/display")
 def display() -> str:
     workouts = _get_workouts()
     exercises = workout_service.get_exercises()
     workout_ids = [w["workout_id"] for w in workouts]
-    exercises_workouts = workout_service.get_exercises_workouts(list_workout_ids=workout_ids)
+    exercises_workouts = workout_service.get_exercises_workouts(
+        list_workout_ids=workout_ids
+    )
     exercise_workout_ids = [ew["exercise_workout_id"] for ew in exercises_workouts]
     sets = workout_service.get_sets(list_exercise_workout_ids=exercise_workout_ids)
     return render_template(
-        "pages/display.html", 
+        "pages/display.html",
         user_name=session["user_name"],
         value_filter_start_date=value_filter_start_date,
         value_filter_end_date=value_filter_end_date,
         workouts=workouts,
         exercises=exercises,
         exercises_workouts=exercises_workouts,
-        sets=sets
+        sets=sets,
     )
+
 
 @pages_bp.route("/statistics")
 def statistics() -> str:
-    return render_template(
-        "pages/statistics.html", 
-        user_name=session["user_name"]
-    )
+    return render_template("pages/statistics.html", user_name=session["user_name"])
+
 
 def _get_workouts() -> list[tuple]:
     global value_filter_end_date, value_filter_start_date
@@ -67,5 +68,5 @@ def _get_workouts() -> list[tuple]:
     return workout_service.get_workouts(
         user_id=session["user_id"],
         filter_start_day=datetime.strptime(filter_start_date, "%Y-%m-%d").date(),
-        filter_end_day=datetime.strptime(filter_end_date, "%Y-%m-%d").date()
+        filter_end_day=datetime.strptime(filter_end_date, "%Y-%m-%d").date(),
     )

@@ -2,6 +2,7 @@ from datetime import date
 from utils.dbclient import DBClient
 from utils.hash import hash_password, compare_passwords
 
+
 class UserService:
     def __init__(self, db: DBClient) -> None:
         self.db = db
@@ -21,11 +22,20 @@ class UserService:
             return {"user_id": user_id, "first_name": first_name}
         return None
 
-    def create_user(self, first_name: str, last_name: str, email: str, password: str, birthdate: date, height_cm: int) -> None:
+    def create_user(
+        self,
+        first_name: str,
+        last_name: str,
+        email: str,
+        password: str,
+        birthdate: date,
+        height_cm: int,
+    ) -> None:
         password_hash = hash_password(password)
         self.db.execute(
             "INSERT INTO user (first_name, last_name, email, password_hash, date_of_birth, height_cm) VALUES (?, ?, ?, ?, ?, ?)",
-            (first_name, last_name, email, password_hash, birthdate, height_cm), commit=True
+            (first_name, last_name, email, password_hash, birthdate, height_cm),
+            commit=True,
         )
 
     def authenticate_user(self, email: str, password: str) -> bool:
