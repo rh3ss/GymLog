@@ -8,17 +8,19 @@ class WorkoutService:
 
     def get_workout_types(self) -> list[tuple]:
         return self.db.execute(
-            "SELECT workout_type_id, name FROM workout_type ORDER BY name", fetch=True
+            sql="SELECT workout_type_id, name FROM workout_type ORDER BY name",
+            fetch=True,
         )
 
     def get_muscle_groups(self) -> list[tuple]:
         return self.db.execute(
-            "SELECT muscle_group_id, name FROM muscle_group ORDER BY name", fetch=True
+            sql="SELECT muscle_group_id, name FROM muscle_group ORDER BY name",
+            fetch=True,
         )
 
     def get_equipment(self) -> list[tuple]:
         return self.db.execute(
-            "SELECT equipment_id, name FROM equipment ORDER BY name", fetch=True
+            sql="SELECT equipment_id, name FROM equipment ORDER BY name", fetch=True
         )
 
     def get_exercises(self) -> list[tuple]:
@@ -34,6 +36,10 @@ class WorkoutService:
             params=(user_id, filter_start_day.isoformat(), filter_end_day.isoformat()),
             fetch=True,
         )
+
+    def get_last_workout(self, user_id: int) -> list[tuple]:
+        sql = self.db.extract_sql(file_name="extract_last_workout.sql")
+        return self.db.execute(sql=sql, params=(user_id,), fetch=True)
 
     def get_exercises_workouts(self, list_workout_ids: list) -> list[tuple]:
         sql = self.db.extract_sql(
@@ -59,7 +65,7 @@ class WorkoutService:
         workout_note: str,
     ) -> int:
         inserted_workout_id = self.db.execute(
-            "INSERT INTO workout (user_id, workout_type_id, name, date, start_time, end_time, calories_burned, note) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+            sql="INSERT INTO workout (user_id, workout_type_id, name, date, start_time, end_time, calories_burned, note) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
             params=(
                 user_id,
                 workout_type_id,
@@ -79,14 +85,14 @@ class WorkoutService:
         self, equipment_id: int, muscle_group_id: int, name: str, description: str
     ) -> None:
         self.db.execute(
-            "INSERT INTO exercise (equipment_id, muscle_group_id, name, description) VALUES (?, ?, ?, ?)",
+            sql="INSERT INTO exercise (equipment_id, muscle_group_id, name, description) VALUES (?, ?, ?, ?)",
             params=(equipment_id, muscle_group_id, name, description or None),
             commit=True,
         )
 
     def create_exercise_workout(self, workout_id: int, exercise_id: int) -> int:
         inserted_exercise_workout_id = self.db.execute(
-            "INSERT INTO exercise_workout (workout_id, exercise_id) VALUES (?, ?)",
+            sql="INSERT INTO exercise_workout (workout_id, exercise_id) VALUES (?, ?)",
             params=(workout_id, exercise_id),
             commit=True,
             return_lastrowid=True,
@@ -97,7 +103,7 @@ class WorkoutService:
         self, exercise_workout_id: int, set_number: int, weight: float, repetitions: int
     ) -> None:
         self.db.execute(
-            "INSERT INTO set_entry (exercise_workout_id, set_number, weight, repetitions) VALUES (?, ?, ?, ?)",
+            sql="INSERT INTO set_entry (exercise_workout_id, set_number, weight, repetitions) VALUES (?, ?, ?, ?)",
             params=(exercise_workout_id, set_number, weight, repetitions),
             commit=True,
         )

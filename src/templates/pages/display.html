@@ -21,13 +21,13 @@
     </nav>
     <div class="container mt-5">
         <div class="d-flex justify-content-center mt-4">
-            <a href="{{ url_for('pages.overview_page') }}" class="btn btn-custom btn-switch mx-2">Übersicht</a>
-            <a href="{{ url_for('pages.create_page') }}" class="btn btn-custom btn-switch mx-2">Anlegen</a>
-            <a href="{{ url_for('pages.display_page') }}" class="btn btn-custom btn-switch mx-2">Anzeigen</a>
-            <a href="{{ url_for('pages.statistics_page') }}" class="btn btn-custom btn-switch mx-2">Statistik</a>
+            <a href="{{ url_for('pages.overview_page') }}" class="btn btn-custom btn-switch mx-2">Überblick</a>
+            <a href="{{ url_for('pages.create_page') }}" class="btn btn-custom btn-switch mx-2">Erstellen</a>
+            <a href="{{ url_for('pages.display_page') }}" class="btn btn-custom btn-switch mx-2">Bearbeiten</a>
+            <a href="{{ url_for('pages.statistics_page') }}" class="btn btn-custom btn-switch mx-2">Auswertung</a>
         </div>
         <form method="GET" id="date-filtering">
-            <div class="row mb-4 justify-content-center align-items-center gx-4 py-2">
+            <div class="row mb-4 date-filtering justify-content-center align-items-center gx-4 py-2">
                 <div class="col-md-3 d-flex align-items-center mb-2 px-3">
                     <label class="form-label sub-text me-3 mb-0" for="filter_start_date">Von</label>
                     <input type="date" name="filter_start_date" class="form-control auto-submit" value="{{ value_filter_start_date }}" required>

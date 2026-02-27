@@ -8,7 +8,9 @@ SELECT
     end_time, 
     calories_burned, 
     note
-FROM workout
-    WHERE user_id = ? AND date BETWEEN ? AND ?
+FROM 
+    workout
+WHERE 
+    user_id = ? AND date BETWEEN ? AND ?
 ORDER BY 
-    date DESC;
+    workout_id DESC;

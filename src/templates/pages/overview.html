@@ -21,14 +21,110 @@
     </nav>
     <div class="container mt-5">
         <div class="d-flex justify-content-center mt-4">
-            <a href="{{ url_for('pages.overview_page') }}" class="btn btn-custom btn-switch mx-2">Übersicht</a>
-            <a href="{{ url_for('pages.create_page') }}" class="btn btn-custom btn-switch mx-2">Anlegen</a>
-            <a href="{{ url_for('pages.display_page') }}" class="btn btn-custom btn-switch mx-2">Anzeigen</a>
-            <a href="{{ url_for('pages.statistics_page') }}" class="btn btn-custom btn-switch mx-2">Statistik</a>
+            <a href="{{ url_for('pages.overview_page') }}" class="btn btn-custom btn-switch mx-2">Überblick</a>
+            <a href="{{ url_for('pages.create_page') }}" class="btn btn-custom btn-switch mx-2">Erstellen</a>
+            <a href="{{ url_for('pages.display_page') }}" class="btn btn-custom btn-switch mx-2">Bearbeiten</a>
+            <a href="{{ url_for('pages.statistics_page') }}" class="btn btn-custom btn-switch mx-2">Auswertung</a>
         </div>
-    </div>
-	    <div class="container mt-4">
-        <h2 class="mb-4">Übersicht anzeigen</h2>
+        <div class="container mt-4">
+            <h2 class="form-label header-text">Dein letztes Workout am {{ last_workout[0].date }}</h2>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <label class="form-label sub-text">Name</label>
+                        <input type="text" class="form-control" value="{{ last_workout[0].name }}" readonly></input>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label sub-text">Trainingstyp</label>
+                        <input type="text" class="form-control" value="{{ last_workout[0].workout_type_name }}" readonly></input>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label sub-text">Kalorienverbrauch</label>
+                        <input type="number" class="form-control" value="{{ last_workout[0].calories_burned }}" readonly></input>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <label class="form-label sub-text">Datum</label>
+                        <input type="date" class="form-control" value="{{ last_workout[0].date }}" readonly></input>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label sub-text">Startzeit</label>
+                        <input type="time" class="form-control" value="{{ last_workout[0].start_time }}" readonly></input>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label sub-text">Endzeit</label>
+                        <input type="time" class="form-control" value="{{ last_workout[0].end_time }}" readonly></input>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label sub-text">Notiz</label>
+                    <textarea type="text" class="form-control" value="{{ last_workout[0].note }}" rows="1" readonly></textarea>
+                </div>
+                <div class="card mb-3">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <span class="form-label sub-text">Übungen</span>
+                    </div>
+                    <div class="card-body">
+                        {% if last_exercises_workout %}
+                            {% for ew in last_exercises_workout %}
+                                {% if ew.workout_id == last_workout[0].workout_id %}
+                                <div class="card mb-3 exercise-card" data-index="${{ loop.index }}">
+                                    <div class="card-body">
+                                        <div class="row align-items-start g-2">
+                                            <div class="col-md-5">
+                                                <input type="text" class="form-control" value="{{ ew.exercise_name }}" readonly>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <input type="text" class="form-control" value="{{ ew.muscle_group_name }}" readonly>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <input type="text" class="form-control" value="{{ ew.equipment_name }}" readonly>
+                                            </div>
+                                            <div class="col-md-12 mt-2">
+                                                <small class="form-text description-text">{{ ew.exercise_description }}</small>
+                                            </div>
+                                            {% if last_exercises_sets %}
+                                            <div class="row mt-3">
+                                                <div class="col-md-9">
+                                                    <div class="card">
+                                                        <div class="card-header d-flex justify-content-between">
+                                                            <span class="form-label sub-text">Sätze</span>
+                                                        </div>
+                                                        <div class="card-body sets-container">
+                                                        {% for s in last_exercises_sets %}
+                                                            {% if s.exercise_workout_id == ew.exercise_workout_id %}
+                                                                <div class="card mb-2 setCard">
+                                                                    <div class="card-body">
+                                                                        <div class="row">
+                                                                            <div class="col-md-4">
+                                                                                <input type="number" class="form-control" value="{{ s.weight }}" readonly>
+                                                                            </div>
+                                                                            <div class="col-md-4">
+                                                                                <input type="number" class="form-control" value="{{ s.repetitions }}" readonly>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </body>
 </html>
