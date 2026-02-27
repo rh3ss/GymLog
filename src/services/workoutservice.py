@@ -81,6 +81,12 @@ class WorkoutService:
         )
         return inserted_workout_id
 
+    def exercise_exists(self, exercise_name: str) -> bool:
+        exists = self.db.execute(
+            "SELECT name FROM exercise WHERE name = ?", (exercise_name,), fetch=True
+        )
+        return bool(exists)
+
     def create_exercise(
         self, equipment_id: int, muscle_group_id: int, name: str, description: str
     ) -> None:

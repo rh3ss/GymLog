@@ -24,119 +24,122 @@
         <div class="d-flex justify-content-center mt-4">
             <a href="{{ url_for('pages.overview_page') }}" class="btn btn-custom btn-switch mx-2">Überblick</a>
             <a href="{{ url_for('pages.create_page') }}" class="btn btn-custom btn-switch mx-2">Erstellen</a>
-            <a href="{{ url_for('pages.display_page') }}" class="btn btn-custom btn-switch mx-2">Bearbeiten</a>
+            <a href="{{ url_for('pages.edit_page') }}" class="btn btn-custom btn-switch mx-2">Bearbeiten</a>
             <a href="{{ url_for('pages.statistics_page') }}" class="btn btn-custom btn-switch mx-2">Auswertung</a>
         </div>
         <div id="accordion">
-        <div class="card">
-            <div class="card-header" id="headingOne">
-                <h5 class="mb-0">
-                    <button class="btn btn-custom btn-accordion mx-2" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">Workout anlegen</button>
-                </h5>
-            </div>
-            <div class="collapse" id="collapseOne" aria-labelledby="headingOne" data-bs-parent="#accordion">
-                <div class="card-body">
-                    <form method="POST" action="{{ url_for('workouts.add_workout') }}">
-                        <div class="row mb-3">
-                            <div class="col-md-4">
-                                <label class="form-label sub-text">Name</label>
-                                <input type="text" name="workout_name" class="form-control" required></input>
+            <div class="card">
+                <div class="card-header" id="headingOne">
+                    <h5 class="mb-0">
+                        <button class="btn btn-custom btn-accordion mx-2" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">Workout anlegen</button>
+                    </h5>
+                </div>
+                <div class="collapse" id="collapseOne" aria-labelledby="headingOne" data-bs-parent="#accordion">
+                    <div class="card-body">
+                        <form method="POST" action="{{ url_for('workouts.create_workout') }}">
+                            <div class="row mb-3">
+                                <div class="col-md-4">
+                                    <label class="form-label sub-text">Name</label>
+                                    <input type="text" name="workout_name" class="form-control" required></input>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label sub-text">Trainingstyp</label>
+                                    <select class="form-control" name="workout_type" required>
+                                        {% for wt in workout_types %}
+                                            <option value="{{ wt.workout_type_id }}">{{ wt.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label sub-text">Kalorienverbrauch</label>
+                                    <input type="number" name="workout_calories" class="form-control"></input>
+                                </div>
                             </div>
-                            <div class="col-md-4">
-                                <label class="form-label sub-text">Trainingstyp</label>
-                                <select class="form-control" name="workout_type" required>
-                                    {% for wt in workout_types %}
-                                        <option value="{{ wt.workout_type_id }}">{{ wt.name }}</option>
-                                    {% endfor %}
-                                </select>
+                            <div class="row mb-3">
+                                <div class="col-md-4">
+                                    <label class="form-label sub-text">Datum</label>
+                                    <input type="date" name="workout_date" class="form-control" required></input>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label sub-text">Startzeit</label>
+                                    <input type="time" name="workout_start_time" class="form-control"></input>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label sub-text">Endzeit</label>
+                                    <input type="time" name="workout_end_time" class="form-control"></input>
+                                </div>
                             </div>
-                            <div class="col-md-4">
-                                <label class="form-label sub-text">Kalorienverbrauch</label>
-                                <input type="number" name="workout_calories" class="form-control"></input>
+                            <div class="mb-3">
+                                <label class="form-label sub-text">Notiz</label>
+                                <textarea type="text" name="workout_note" class="form-control" rows="1"></textarea>
                             </div>
-                        </div>
-                        <div class="row mb-3">
-                            <div class="col-md-4">
-                                <label class="form-label sub-text">Datum</label>
-                                <input type="date" name="workout_date" class="form-control" required></input>
+                            <div class="card mb-3">
+                                <div class="card-header d-flex justify-content-between align-items-center">
+                                    <span class="form-label sub-text">Übungen</span>
+                                    <button type="button" class="btn btn-custom btn-add-remove-item" onclick="addExercise()">+</button>
+                                </div>
+                                <div class="card-body" id="exercise_container"></div>
                             </div>
-                            <div class="col-md-4">
-                                <label class="form-label sub-text">Startzeit</label>
-                                <input type="time" name="workout_start_time" class="form-control"></input>
-                            </div>
-                            <div class="col-md-4">
-                                <label class="form-label sub-text">Endzeit</label>
-                                <input type="time" name="workout_end_time" class="form-control"></input>
-                            </div>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label sub-text">Notiz</label>
-                            <textarea type="text" name="workout_note" class="form-control" rows="1"></textarea>
-                        </div>
-                        <div class="card mb-3">
-                            <div class="card-header d-flex justify-content-between align-items-center">
-                                <span class="form-label sub-text">Übungen</span>
-                                <button type="button" class="btn btn-custom btn-add-remove-item" onclick="addExercise()">+</button>
-                            </div>
-                            <div class="card-body" id="exercise_container"></div>
-                        </div>
-                        <button type="submit" class="btn btn-custom btn-login sub-text">Speichern</button>
-                    </form>
+                            <button type="submit" class="btn btn-custom btn-login sub-text">Speichern</button>
+                        </form>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="card">
-            <div class="card-header" id="headingThree">
-            <h5 class="mb-0">
-                <button class="btn btn-custom btn-accordion mx-2 collapsed" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">Workoutvorlage anlegen</button>
-            </h5>
-            </div>
-            <div class="collapse" id="collapseThree" aria-labelledby="headingThree" data-bs-parent="#accordion">
-            <div class="card-body">
-                Übung anlegen Text.
-            </div>
-            </div>
-        </div>
-        <div class="card">
-            <div class="card-header" id="headingTwo">
-                <h5 class="mb-0">
-                    <button class="btn btn-custom btn-accordion mx-2 collapsed" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">Übung anlegen</button>
-                </h5>
-            </div>
-            <div class="collapse" id="collapseTwo" aria-labelledby="headingTwo" data-bs-parent="#accordion">
-            <div class="card-body">
-                <form method="POST" action="{{ url_for('workouts.add_exercise') }}">
-                    <div class="row mb-3">
-                        <div class="col-md-4">
-                            <label class="form-label sub-text">Name</label>
-                            <input type="text" name="exercise_name" class="form-control" required></input>
-                        </div>
-                        <div class="col-md-4">
-                            <label class="form-label sub-text">Muskelgruppe</label>
-                            <select class="form-control" name="exercise_muscle_group" required>
-                                {% for mg in muscle_group %}
-                                    <option value="{{ mg.muscle_group_id }}">{{ mg.name }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                        <div class="col-md-4">
-                            <label class="form-label sub-text">Equipment</label>
-                            <select class="form-control" name="exercise_equipment" required>
-                                {% for eq in equipment %}
-                                    <option value="{{ eq.equipment_id }}">{{ eq.name }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
+            <div class="card">
+                <div class="card-header" id="headingThree">
+                    <h5 class="mb-0">
+                        <button class="btn btn-custom btn-accordion mx-2 collapsed" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">Workoutvorlage anlegen</button>
+                    </h5>
+                </div>
+                <div class="collapse" id="collapseThree" aria-labelledby="headingThree" data-bs-parent="#accordion">
+                    <div class="card-body">
+                        Übung anlegen Text.
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label sub-text">Beschreibung</label>
-                        <textarea type="text" name="exercise_description" class="form-control" rows="1"></textarea>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header" id="headingTwo">
+                    <h5 class="mb-0">
+                        <button class="btn btn-custom btn-accordion mx-2 collapsed {% if not exercise_exists_error %}collapsed{% endif %}" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="{{ 'true' if exercise_exists_error else 'false' }}" aria-controls="collapseTwo">Übung anlegen</button>
+                    </h5>
+                </div>
+                <div class="collapse {% if exercise_exists_error %}show{% endif %}" id="collapseTwo" aria-labelledby="headingTwo" data-bs-parent="#accordion">
+                    <div class="card-body">
+                        <form method="POST" action="{{ url_for('workouts.create_exercise') }}">
+                            <div class="row mb-3">
+                                <div class="col-md-4">
+                                    <label class="form-label sub-text">Name</label>
+                                    <input type="text" name="exercise_name" class="form-control" required></input>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label sub-text">Muskelgruppe</label>
+                                    <select class="form-control" name="exercise_muscle_group" required>
+                                        {% for mg in muscle_group %}
+                                            <option value="{{ mg.muscle_group_id }}">{{ mg.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label sub-text">Equipment</label>
+                                    <select class="form-control" name="exercise_equipment" required>
+                                        {% for eq in equipment %}
+                                            <option value="{{ eq.equipment_id }}">{{ eq.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label sub-text">Beschreibung</label>
+                                <textarea type="text" name="exercise_description" class="form-control" rows="1"></textarea>
+                            </div>
+                            {% if exercise_exists_error %}
+                                <div class="text-danger mb-3 sub-text">Eine Übung mit diesem Namen wurde schon angelegt</div>
+                            {% endif %}
+                            <button type="submit" class="btn btn-custom btn-login sub-text">Speichern</button>
+                        </form>
                     </div>
-                    <button type="submit" class="btn btn-custom btn-login sub-text">Speichern</button>
-                </form>
+                </div>
             </div>
-            </div>
-        </div>
         </div>
     </div>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>

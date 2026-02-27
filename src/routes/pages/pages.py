@@ -1,7 +1,7 @@
 from routes.config import pages_bp
 from routes.pages.overview_page import render_overview_page
 from routes.pages.create_page import render_create_page
-from routes.pages.display_page import render_display_page
+from routes.pages.edit_page import render_edit_page
 from routes.pages.statistics_page import render_statistics_page
 
 
@@ -15,9 +15,9 @@ def create_page() -> str:
     return render_create_page()
 
 
-@pages_bp.route("/display")
-def display_page() -> str:
-    return render_display_page()
+@pages_bp.route("/edit")
+def edit_page() -> str:
+    return render_edit_page()
 
 
 @pages_bp.route("/statistics")

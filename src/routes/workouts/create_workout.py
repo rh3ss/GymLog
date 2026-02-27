@@ -3,8 +3,8 @@ from flask import request, session, redirect, url_for
 from ..config import workout_service, workouts_bp
 
 
-@workouts_bp.route("/add_workout", methods=["POST"])
-def add_workout() -> str:
+@workouts_bp.route("/create_workout", methods=["POST"])
+def create_workout() -> str:
     if request.method == "POST":
         _create_exercises(workout_id=_create_workout())
 

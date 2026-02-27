@@ -6,7 +6,7 @@ value_filter_end_date = date.today()
 value_filter_start_date = value_filter_end_date - timedelta(days=7)
 
 
-def render_display_page() -> str:
+def render_edit_page() -> str:
     workouts = _get_workouts()
     exercises = workout_service.get_exercises()
     workout_ids = [w["workout_id"] for w in workouts]
@@ -16,7 +16,7 @@ def render_display_page() -> str:
     exercise_workout_ids = [ew["exercise_workout_id"] for ew in exercises_workouts]
     sets = workout_service.get_sets(list_exercise_workout_ids=exercise_workout_ids)
     return render_template(
-        "pages/display.html",
+        "pages/edit.html",
         user_name=session["user_name"],
         value_filter_start_date=value_filter_start_date,
         value_filter_end_date=value_filter_end_date,
