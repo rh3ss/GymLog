@@ -19,7 +19,7 @@ def create_exercise() -> str:
                 muscle_group=muscle_group,
                 equipment=equipment,
                 exercises=exercises,
-                exercise_exists_error=True
+                exercise_exists_error=True,
             )
 
         workout_service.create_exercise(

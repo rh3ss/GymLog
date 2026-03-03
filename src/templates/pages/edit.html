@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta3/dist/css/bootstrap-select.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
@@ -40,127 +41,251 @@
         </form>
         <div class="accordion" id="workoutAccordion">
             {% for w in workouts %}
-            <div class="accordion-item" data-index="{{ w.workout_id }}">
-                <h2 class="accordion-header" id="heading{{ loop.index }}">
-                    <button class="accordion-button sub-text collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ loop.index }}" aria-expanded="false" aria-controls="collapse{{ loop.index }}">{{ w.date }}</button>
-                </h2>
-                <div id="collapse{{ loop.index }}" class="accordion-collapse collapse" aria-labelledby="heading{{ loop.index }}" data-bs-parent="#workoutAccordion">
-                    <div class="accordion-body">
-                        <div class="row mb-3">
-                            <div class="col-md-4">
-                                <label class="form-label sub-text">Name</label>
-                                <input type="text" name="workout_name" class="form-control" value="{{ w.name }}" readonly></input>
+            <form method="POST" action="{{ url_for('workouts.edit_workout') }}">
+                <input type="hidden" name="workout_id" value="{{ w.workout_id }}">
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="heading{{ loop.index }}">
+                        <button class="accordion-button sub-text collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ loop.index }}" aria-expanded="false" aria-controls="collapse{{ loop.index }}">{{ w.date }}</button>
+                    </h2>
+                    <div id="collapse{{ loop.index }}" class="accordion-collapse collapse" aria-labelledby="heading{{ loop.index }}" data-bs-parent="#workoutAccordion">
+                        <div class="accordion-body">
+                            <div class="row mb-3">
+                                <div class="col-md-4">
+                                    <label class="form-label sub-text">Name</label>
+                                    <input type="text" name="workout_name" class="form-control" value="{{ w.name }}" readonly></input>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label sub-text">Trainingstyp</label>
+                                    <input type="text" name="workout_type" class="form-control" value="{{ w.workout_type_id }}" readonly></input>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label sub-text">Kalorienverbrauch</label>
+                                    <input type="number" name="workout_calories" class="form-control" value="{{ w.calories_burned }}" readonly></input>
+                                </div>
                             </div>
-                            <div class="col-md-4">
-                                <label class="form-label sub-text">Trainingstyp</label>
-                                <input type="text" name="workout_type" class="form-control" value="{{ w.workout_type_id }}" readonly></input>
+                            <div class="row mb-3">
+                                <div class="col-md-4">
+                                    <label class="form-label sub-text">Datum</label>
+                                    <input type="date" name="workout_date" class="form-control" value="{{ w.date }}" readonly></input>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label sub-text">Startzeit</label>
+                                    <input type="time" name="workout_start_time" class="form-control" value="{{ w.start_time if w.start_time else '' }}" readonly></input>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label sub-text">Endzeit</label>
+                                    <input type="time" name="workout_end_time" class="form-control" value="{{ w.end_time if w.end_time else '' }}" readonly></input>
+                                </div>
                             </div>
-                            <div class="col-md-4">
-                                <label class="form-label sub-text">Kalorienverbrauch</label>
-                                <input type="number" name="workout_calories" class="form-control" value="{{ w.calories_burned }}" readonly></input>
+                            <div class="mb-3">
+                                <label class="form-label sub-text">Notiz</label>
+                                <textarea type="text" name="workout_note" class="form-control" rows="1" readonly>{{ w.note}}</textarea>
                             </div>
-                        </div>
-                        <div class="row mb-3">
-                            <div class="col-md-4">
-                                <label class="form-label sub-text">Datum</label>
-                                <input type="date" name="workout_date" class="form-control" value="{{ w.date }}" readonly></input>
-                            </div>
-                            <div class="col-md-4">
-                                <label class="form-label sub-text">Startzeit</label>
-                                <input type="time" name="workout_start_time" class="form-control" value="{{ w.start_time }}" readonly></input>
-                            </div>
-                            <div class="col-md-4">
-                                <label class="form-label sub-text">Endzeit</label>
-                                <input type="time" name="workout_end_time" class="form-control" value="{{ w.end_time }}" readonly></input>
-                            </div>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label sub-text">Notiz</label>
-                            <textarea type="text" name="workout_note" class="form-control" rows="1" readonly>{{ w.note}}</textarea>
-                        </div>
-                        <div class="card mb-3">
-                            <div class="card-header d-flex justify-content-between align-items-center">
-                                <span class="form-label sub-text">Übungen</span>
-                                <!-- <button type="button" class="btn btn-custom btn-add-remove-item" onclick="addExercise()">+</button> -->
-                            </div>
-                            <div class="card-body">
-                                {% if exercises_workouts %}
-                                    {% for ew in exercises_workouts %}
-                                        {% if ew.workout_id == w.workout_id %}
-                                        <div class="card mb-3 exercise-card" data-index="${{ loop.index }}">
-                                            <div class="card-body">
-                                                <div class="row align-items-start g-2">
-                                                    <div class="col-md-5">
-                                                        <input type="text" class="form-control" value="{{ ew.exercise_name }}" readonly>
-                                                    </div>
-                                                    <div class="col-md-2">
-                                                        <input type="text" class="form-control" value="{{ ew.muscle_group_name }}" readonly>
-                                                    </div>
-                                                    <div class="col-md-2">
-                                                        <input type="text" class="form-control" value="{{ ew.equipment_name }}" readonly>
-                                                    </div>
-                                                    <div class="col-md-2"></div>
-                                                    <div class="col-md-1 d-flex justify-content-center">
-                                                        <!-- <button type="button" class="btn btn-custom btn-add-remove-item" onclick="removeExercise(this)">-</button> -->
-                                                    </div>
-                                                    <div class="col-md-12 mt-2">
-                                                        <small class="form-text description-text">{{ ew.exercise_description }}</small>
-                                                    </div>
-                                                    {% if sets %}
-                                                    <div class="row mt-3">
-                                                        <div class="col-md-9">
-                                                            <div class="card">
-                                                                <div class="card-header d-flex justify-content-between">
-                                                                    <span class="form-label sub-text">Sätze</span>
-                                                                    <!-- <button type="button" class="btn btn-custom btn-add-remove-item" onclick="addSet(${index})">+</button> -->
-                                                                </div>
-                                                                <div class="card-body sets-container">
-                                                                {% for s in sets %}
-                                                                    {% if s.exercise_workout_id == ew.exercise_workout_id %}
-                                                                        <div class="card mb-2 setCard">
-                                                                            <div class="card-body">
-                                                                                <div class="row">
-                                                                                    <div class="col-md-4">
-                                                                                        <input type="number" class="form-control" value="{{ s.weight }}" readonly>
+                            <div class="card mb-3">
+                                <div class="card-header d-flex justify-content-between align-items-center">
+                                    <span class="form-label sub-text">Übungen</span>
+                                    <button type="button" class="btn btn-custom btn-add-remove-item" onclick="addExercise(this)">+</button>
+                                </div>
+                                <div class="card-body exercise_container">
+                                    {% if exercises_workouts %}
+                                        {% for ew in exercises_workouts %}
+                                            {% if ew.workout_id == w.workout_id %}
+                                            <div class="card mb-3 exercise-card" data-index="{{ ew.exercise_workout_id }}">
+                                                <input type="hidden" name="exercises_workouts_ids[]" value="{{ ew.exercise_workout_id }}">
+                                                <div class="card-body">
+                                                    <div class="row align-items-start g-2">
+                                                        <div class="col-md-5">
+                                                            <select class="form-control selectpicker edit-exercise-select" data-live-search="true" name="exercise_id[]">
+                                                                {% for ex in exercises %}
+                                                                    <option value="{{ ex.exercise_id }}" data-muscle-group-id="{{ ex.muscle_group_name }}" data-equipment-id="{{ ex.equipment_name }}" data-description="{{ ex.exercise_description }}" {% if ex.exercise_id == ew.exercise_id %} selected {% endif %}>
+                                                                        {{ ex.exercise_name }}
+                                                                    </option>
+                                                                {% endfor %}
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <input type="text" class="form-control muscle_group" value="{{ ew.muscle_group_name }}" readonly>
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <input type="text" class="form-control equipment" value="{{ ew.equipment_name }}" readonly>
+                                                        </div>
+                                                        <div class="col-md-2"></div>
+                                                        <div class="col-md-1 d-flex justify-content-center">
+                                                            <button type="button" class="btn btn-custom btn-add-remove-item" onclick="removeExercise(this)">-</button>
+                                                        </div>
+                                                        <div class="col-md-12 mt-2">
+                                                            <small class="form-text description-text">{{ ew.exercise_description }}</small>
+                                                        </div>
+                                                        {% if sets %}
+                                                        <div class="row mt-3">
+                                                            <div class="col-md-9">
+                                                                <div class="card">
+                                                                    <div class="card-header d-flex justify-content-between">
+                                                                        <span class="form-label sub-text">Sätze</span>
+                                                                        <button type="button" class="btn btn-custom btn-add-remove-item" onclick="addSet('{{ ew.exercise_workout_id }}')">+</button>
+                                                                    </div>
+                                                                    <div class="card-body sets-container">
+                                                                    {% for s in sets %}
+                                                                        {% if s.exercise_workout_id == ew.exercise_workout_id %}
+                                                                            <div class="card mb-2 setCard">
+                                                                                <input type="hidden" name="sets_ids[{{ ew.exercise_workout_id }}][]" value="{{ s.set_entry_id }}">
+                                                                                <div class="card-body">
+                                                                                    <div class="row">
+                                                                                        <div class="col-md-4">
+                                                                                            <input type="number" class="form-control" name="weights[{{ ew.exercise_workout_id }}][]" value="{{ s.weight if s.weight is not none else '' }}" readonly>
+                                                                                        </div>
+                                                                                        <div class="col-md-4">
+                                                                                            <input type="number" class="form-control" name="reps[{{ ew.exercise_workout_id }}][]" value="{{ s.repetitions if s.repetitions is not none else '' }}" readonly>
+                                                                                        </div>
+                                                                                        <div class="col-md-3"></div>
+                                                                                        <div class="col-md-1"> 
+                                                                                            <button type="button" class="btn btn-custom btn-add-remove-item" onclick="removeSet(this)">-</button> 
+                                                                                        </div> 
                                                                                     </div>
-                                                                                    <div class="col-md-4">
-                                                                                        <input type="number" class="form-control" value="{{ s.repetitions }}" readonly>
-                                                                                    </div>
-                                                                                    <div class="col-md-3"></div>
-                                                                                    <div class="col-md-1"> 
-                                                                                        <!-- <button type="button" class="btn btn-custom btn-add-remove-item" onclick="removeSet(this)">-</button>  -->
-                                                                                    </div> 
                                                                                 </div>
                                                                             </div>
-                                                                        </div>
-                                                                    {% endif %}
-                                                                {% endfor %}
+                                                                        {% endif %}
+                                                                    {% endfor %}
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
+                                                        {% endif %}
                                                     </div>
-                                                    {% endif %}
                                                 </div>
                                             </div>
-                                        </div>
-                                        {% endif %}
-                                    {% endfor %}
-                                {% endif %}
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% endif %}
+                                </div>
                             </div>
+                            <button type="submit" class="btn btn-custom btn-save-changes sub-text">Änderungen speichern</button>
                         </div>
                     </div>
                 </div>
-            </div>
+            </form>
             {% endfor %}
         </div>
     </div>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta3/dist/js/bootstrap-select.min.js"></script>
+
     <script>
     document.querySelectorAll(".auto-submit").forEach(input => {
         input.addEventListener("change", function() {
             document.getElementById("date-filtering").submit();
         });
     });
+    $(document).ready(function() {
+        $('.selectpicker').selectpicker();
+        $('.edit-exercise-select').on('changed.bs.select', function() {
+            updateExerciseData($(this));
+        });
+    });
+
+    function updateExerciseData(selectElement) {
+        let selected = selectElement.find('option:selected');
+        let muscle_group = selected.data('muscle-group-id') || '';
+        let equipment = selected.data('equipment-id') || '';
+        let description = selected.data('description') || '';
+        let card = selectElement.closest('.exercise-card');
+
+        card.find('.muscle_group').val(muscle_group);
+        card.find('.equipment').val(equipment);
+        card.find('.description-text').text(description);
+    }
+
+    function addExercise(button){
+        let container = $(button).closest('.card').find('.exercise_container');
+        let index = Date.now();
+        let new_card = $(`
+            <div class="card mb-3 exercise-card" data-index="${index}">
+                <div class="card-body">
+                    <div class="row align-items-start g-2">
+                        <div class="col-md-5">
+                            <select class="form-control selectpicker" data-live-search="true" name="exercise_id[]">
+                            {% for ex in exercises %}
+                                <option value="{{ ex.exercise_id }}" data-muscle-group-id="{{ ex.muscle_group_name }}" data-equipment-id="{{ ex.equipment_name }}" data-description="{{ ex.exercise_description }}">
+                                    {{ ex.exercise_name }}
+                                </option>
+                            {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <input type="text" class="form-control muscle_group" readonly>
+                        </div>
+                        <div class="col-md-2">
+                            <input type="text" class="form-control equipment" readonly>
+                        </div>
+                        <div class="col-md-2"></div>
+                        <div class="col-md-1 text-center">
+                            <button type="button" class="btn btn-custom btn-add-remove-item" onclick="removeExercise(this)">-</button>
+                        </div>
+                        <div class="col-md-12 mt-2">
+                            <small class="description-text"></small>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-9">
+                            <div class="card">
+                                <div class="card-header d-flex justify-content-between">
+                                    <span>Sätze</span>
+                                    <button type="button" class="btn btn-custom btn-add-remove-item" onclick="addSet(${index})">+</button>
+                                </div>
+                                <div class="card-body sets-container"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `);
+        container.append(new_card);
+        new_card.find('.selectpicker').selectpicker();
+        new_card.find('.selectpicker').on('changed.bs.select', function(){
+                updateExerciseData($(this));
+            }
+        );
+        updateExerciseData(new_card.find('.selectpicker'));
+        addSet(index);
+    }
+    
+    function addSet(exercise_id){
+        let container = $(`.exercise-card[data-index="${exercise_id}"]`).find('.sets-container');
+        let new_set = $(`
+            <div class="card mb-2 setCard"> 
+                <div class="card-body"> 
+                    <div class="row">
+                        <input type="hidden" name="sets_ids[${exercise_id}][]" value="">
+                        <div class="col-md-4"> 
+                            <input type="number" class="form-control" name="weights[${exercise_id}][]" placeholder="Gewicht (kg)" required>
+                        </div> 
+                        <div class="col-md-4"> 
+                            <input type="number" class="form-control" name="reps[${exercise_id}][]" placeholder="Wiederholungen" required> 
+                        </div>
+                        <div class="col-md-3"></div>
+                        <div class="col-md-1"> 
+                            <button type="button" class="btn btn-custom btn-add-remove-item" onclick="removeSet(this)">-</button> 
+                        </div> 
+                    </div> 
+                </div> 
+            </div>
+        `);
+        container.append(new_set);
+        console.log("add new set")
+    }
+
+    function removeExercise(button){
+        $(button).closest(".exercise-card").remove();
+    }
+    
+    function removeSet(button){
+        let set_container = $(button).closest('.setCard').parent();
+        if(set_container.find('.setCard').length > 1){
+            $(button).closest('.setCard').remove();
+        }
+    }
+
     </script>
 </body>
 </html>
