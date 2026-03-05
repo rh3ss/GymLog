@@ -21,7 +21,7 @@
     </nav>
     <div class="container mt-5">
         <div class="d-flex justify-content-center mt-4">
-            <a href="{{ url_for('pages.overview_page') }}" class="btn btn-custom btn-switch mx-2">Überblick</a>
+            <a href="{{ url_for('pages.overview_page') }}" class="btn btn-custom btn-switch btn-switch-selected mx-2">Überblick</a>
             <a href="{{ url_for('pages.create_page') }}" class="btn btn-custom btn-switch mx-2">Erstellen</a>
             <a href="{{ url_for('pages.edit_page') }}" class="btn btn-custom btn-switch mx-2">Bearbeiten</a>
             <a href="{{ url_for('pages.statistics_page') }}" class="btn btn-custom btn-switch mx-2">Auswertung</a>
@@ -61,7 +61,7 @@
                 </div>
                 <div class="mb-3">
                     <label class="form-label sub-text">Notiz</label>
-                    <textarea type="text" class="form-control" value="{{ last_workout[0].note }}" rows="1" readonly></textarea>
+                    <textarea type="text" class="form-control" rows="1" readonly>{{ last_workout[0].note }}</textarea>
                 </div>
                 <div class="card mb-3">
                     <div class="card-header d-flex justify-content-between align-items-center">

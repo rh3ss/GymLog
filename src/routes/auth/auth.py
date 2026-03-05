@@ -41,7 +41,7 @@ def register() -> str:
             birthdate=request.form["birthdate"],
             height_cm=request.form["height_cm"],
         )
-        
+
         return redirect(url_for("auth.login"))
 
     return render_template("auth/register.html")

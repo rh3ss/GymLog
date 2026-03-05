@@ -103,6 +103,11 @@ body {
     letter-spacing: 3px;
 }
 
+.btn-switch-selected {
+    box-shadow: 0 0 0 4px #ff8800;
+    border: none;
+}
+
 #accordion {
     margin-top: 10px;
 }

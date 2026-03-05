@@ -45,7 +45,7 @@ def _create_exercise_sets(
 ) -> None:
     weights = form_data.get(f"sets[{index}][weight][]", [])
     reps = form_data.get(f"sets[{index}][reps][]", [])
-    
+
     for index, set_number in enumerate(range(1, len(reps) + 1)):
         db_create_service.create_set(
             exercise_workout_id=exercise_workout_id,

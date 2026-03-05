@@ -24,7 +24,7 @@
         <div class="d-flex justify-content-center mt-4">
             <a href="{{ url_for('pages.overview_page') }}" class="btn btn-custom btn-switch mx-2">Überblick</a>
             <a href="{{ url_for('pages.create_page') }}" class="btn btn-custom btn-switch mx-2">Erstellen</a>
-            <a href="{{ url_for('pages.edit_page') }}" class="btn btn-custom btn-switch mx-2">Bearbeiten</a>
+            <a href="{{ url_for('pages.edit_page') }}" class="btn btn-custom btn-switch btn-switch-selected mx-2">Bearbeiten</a>
             <a href="{{ url_for('pages.statistics_page') }}" class="btn btn-custom btn-switch mx-2">Auswertung</a>
         </div>
         <form method="GET" id="date-filtering">
@@ -52,34 +52,34 @@
                             <div class="row mb-3">
                                 <div class="col-md-4">
                                     <label class="form-label sub-text">Name</label>
-                                    <input type="text" name="workout_name" class="form-control" value="{{ w.name }}" readonly></input>
+                                    <input type="text" name="workout_name" class="form-control" value="{{ w.name }}" required></input>
                                 </div>
                                 <div class="col-md-4">
                                     <label class="form-label sub-text">Trainingstyp</label>
-                                    <input type="text" name="workout_type" class="form-control" value="{{ w.workout_type_id }}" readonly></input>
+                                    <input type="text" name="workout_type" class="form-control" value="{{ w.workout_type_id }}" required></input>
                                 </div>
                                 <div class="col-md-4">
                                     <label class="form-label sub-text">Kalorienverbrauch</label>
-                                    <input type="number" name="workout_calories" class="form-control" value="{{ w.calories_burned }}" readonly></input>
+                                    <input type="number" name="workout_calories" class="form-control" value="{{ w.calories_burned }}"></input>
                                 </div>
                             </div>
                             <div class="row mb-3">
                                 <div class="col-md-4">
                                     <label class="form-label sub-text">Datum</label>
-                                    <input type="date" name="workout_date" class="form-control" value="{{ w.date }}" readonly></input>
+                                    <input type="date" name="workout_date" class="form-control" value="{{ w.date }}" required></input>
                                 </div>
                                 <div class="col-md-4">
                                     <label class="form-label sub-text">Startzeit</label>
-                                    <input type="time" name="workout_start_time" class="form-control" value="{{ w.start_time if w.start_time else '' }}" readonly></input>
+                                    <input type="time" name="workout_start_time" class="form-control" value="{{ w.start_time if w.start_time else '' }}"></input>
                                 </div>
                                 <div class="col-md-4">
                                     <label class="form-label sub-text">Endzeit</label>
-                                    <input type="time" name="workout_end_time" class="form-control" value="{{ w.end_time if w.end_time else '' }}" readonly></input>
+                                    <input type="time" name="workout_end_time" class="form-control" value="{{ w.end_time if w.end_time else '' }}"></input>
                                 </div>
                             </div>
                             <div class="mb-3">
                                 <label class="form-label sub-text">Notiz</label>
-                                <textarea type="text" name="workout_note" class="form-control" rows="1" readonly>{{ w.note}}</textarea>
+                                <textarea type="text" name="workout_note" class="form-control" rows="1">{{ w.note}}</textarea>
                             </div>
                             <div class="card mb-3">
                                 <div class="card-header d-flex justify-content-between align-items-center">
