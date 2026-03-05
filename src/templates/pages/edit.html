@@ -95,7 +95,7 @@
                                                 <div class="card-body">
                                                     <div class="row align-items-start g-2">
                                                         <div class="col-md-5">
-                                                            <select class="form-control selectpicker edit-exercise-select" data-live-search="true" name="exercise_id[]">
+                                                            <select class="form-control selectpicker edit-exercise-select" data-live-search="true" name="exercise_ids[]">
                                                                 {% for ex in exercises %}
                                                                     <option value="{{ ex.exercise_id }}" data-muscle-group-id="{{ ex.muscle_group_name }}" data-equipment-id="{{ ex.equipment_name }}" data-description="{{ ex.exercise_description }}" {% if ex.exercise_id == ew.exercise_id %} selected {% endif %}>
                                                                         {{ ex.exercise_name }}
@@ -204,7 +204,7 @@
                 <div class="card-body">
                     <div class="row align-items-start g-2">
                         <div class="col-md-5">
-                            <select class="form-control selectpicker" data-live-search="true" name="exercise_id[]">
+                            <select class="form-control selectpicker" data-live-search="true" name="exercise_ids[]">
                             {% for ex in exercises %}
                                 <option value="{{ ex.exercise_id }}" data-muscle-group-id="{{ ex.muscle_group_name }}" data-equipment-id="{{ ex.equipment_name }}" data-description="{{ ex.exercise_description }}">
                                     {{ ex.exercise_name }}

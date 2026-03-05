@@ -3,7 +3,7 @@ from utils.dbclient import DBClient
 from utils.hash import hash_password, compare_passwords
 
 
-class UserService:
+class DBUserService:
     def __init__(self, db: DBClient) -> None:
         self.db = db
 

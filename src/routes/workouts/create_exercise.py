@@ -1,17 +1,18 @@
 from flask import request, render_template, session, redirect, url_for
-from ..config import workout_service, workouts_bp
+from ..config import db_select_service, db_create_service, workouts_bp
 
 
 @workouts_bp.route("/create_exercise", methods=["POST"])
 def create_exercise() -> str:
     if request.method == "POST":
-        if workout_service.exercise_exists(
+        if db_select_service.do_exercise_already_exists(
             exercise_name=request.form.get("exercise_name")
         ):
-            workout_types = workout_service.get_workout_types()
-            muscle_group = workout_service.get_muscle_groups()
-            equipment = workout_service.get_equipment()
-            exercises = workout_service.get_exercises()
+            workout_types = db_select_service.get_workout_types()
+            muscle_group = db_select_service.get_muscle_groups()
+            equipment = db_select_service.get_equipment()
+            exercises = db_select_service.get_exercises_with_equipment_and_musclegroup()
+            
             return render_template(
                 "pages/create.html",
                 user_name=session["user_name"],
@@ -22,7 +23,7 @@ def create_exercise() -> str:
                 exercise_exists_error=True,
             )
 
-        workout_service.create_exercise(
+        db_create_service.create_exercise(
             equipment_id=request.form.get("exercise_equipment"),
             muscle_group_id=request.form.get("exercise_muscle_group"),
             name=request.form.get("exercise_name"),

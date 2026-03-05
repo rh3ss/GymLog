@@ -24,7 +24,7 @@ def wait_for_server(host="127.0.0.1", port=5000):
             with socket.create_connection((host, port), timeout=1):
                 return
         except OSError:
-            time.sleep(0.2)
+            time.sleep(1)
 
 
 def open_browser():

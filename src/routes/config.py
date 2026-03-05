@@ -1,11 +1,13 @@
 from flask import Blueprint
 from utils.dbclient import DBClient
-from services.userservice import UserService
-from services.workoutservice import WorkoutService
+from services.dbuserservice import DBUserService
+from services.dbselectservice import DBSelectService
+from services.dbcreateservice import DBCreateService
 
 gymlog_db = DBClient("gymlog.db")
-user_service = UserService(db=gymlog_db)
-workout_service = WorkoutService(db=gymlog_db)
+db_user_service = DBUserService(db=gymlog_db)
+db_select_service = DBSelectService(db=gymlog_db)
+db_create_service = DBCreateService(db=gymlog_db)
 
 auth_bp = Blueprint("auth", __name__)
 pages_bp = Blueprint("pages", __name__)

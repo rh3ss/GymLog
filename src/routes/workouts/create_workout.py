@@ -1,6 +1,6 @@
 from datetime import datetime
 from flask import request, session, redirect, url_for
-from ..config import workout_service, workouts_bp
+from ..config import db_create_service, workouts_bp
 
 
 @workouts_bp.route("/create_workout", methods=["POST"])
@@ -14,7 +14,8 @@ def create_workout() -> str:
 def _create_workout() -> int:
     workout_date_str = request.form.get("workout_date")
     workout_date_obj = datetime.strptime(workout_date_str, "%Y-%m-%d").date()
-    return workout_service.create_workout(
+
+    return db_create_service.create_workout(
         user_id=session["user_id"],
         workout_type_id=request.form.get("workout_type"),
         workout_name=request.form.get("workout_name"),
@@ -31,7 +32,7 @@ def _create_exercises(workout_id: int) -> None:
     form_data = request.form.to_dict(flat=False)
 
     for index, exercise_id in enumerate(exercises):
-        exercise_workout_id = workout_service.create_exercise_workout(
+        exercise_workout_id = db_create_service.create_exercise_workout(
             workout_id=workout_id, exercise_id=exercise_id
         )
         _create_exercise_sets(
@@ -44,8 +45,9 @@ def _create_exercise_sets(
 ) -> None:
     weights = form_data.get(f"sets[{index}][weight][]", [])
     reps = form_data.get(f"sets[{index}][reps][]", [])
+    
     for index, set_number in enumerate(range(1, len(reps) + 1)):
-        workout_service.create_set(
+        db_create_service.create_set(
             exercise_workout_id=exercise_workout_id,
             set_number=set_number,
             weight=weights[index],
