@@ -31,25 +31,25 @@ def _create_exercises(workout_id: int) -> None:
     exercises = request.form.getlist("workout_exercises[]")
     form_data = request.form.to_dict(flat=False)
 
-    for index, exercise_id in enumerate(exercises):
+    for idx, exercise_id in enumerate(exercises):
         exercise_workout_id = db_create_service.create_exercise_workout(
             workout_id=workout_id, exercise_id=exercise_id
         )
         _create_exercise_sets(
-            form_data=form_data, index=index, exercise_workout_id=exercise_workout_id
+            form_data=form_data, idx=idx, exercise_workout_id=exercise_workout_id
         )
 
 
 def _create_exercise_sets(
-    form_data: dict[str, list[str]], index: int, exercise_workout_id: int
+    form_data: dict[str, list[str]], idx: int, exercise_workout_id: int
 ) -> None:
-    weights = form_data.get(f"sets[{index}][weight][]", [])
-    reps = form_data.get(f"sets[{index}][reps][]", [])
+    weights = form_data.get(f"sets[{idx}][weight][]", [])
+    reps = form_data.get(f"sets[{idx}][reps][]", [])
 
-    for index, set_number in enumerate(range(1, len(reps) + 1)):
+    for idx, set_number in enumerate(range(1, len(reps) + 1)):
         db_create_service.create_set(
             exercise_workout_id=exercise_workout_id,
             set_number=set_number,
-            weight=weights[index],
-            repetitions=reps[index],
+            weight=weights[idx],
+            repetitions=reps[idx],
         )

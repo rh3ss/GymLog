@@ -13,13 +13,18 @@ class DBDeleteService:
         )
 
     def delete_exercise_workout_entry(self, exercise_workout_id: int) -> None:
-        self.db.execute(
-            "DELETE FROM set_entry WHERE exercise_workout_id = ?;",
-            params=(exercise_workout_id,),
-            commit=True,
+        self.delete_set_entry_by_exercise_workout_id(
+            exercise_workout_id=exercise_workout_id
         )
         self.db.execute(
             "DELETE FROM exercise_workout WHERE exercise_workout_id = ?;",
+            params=(exercise_workout_id,),
+            commit=True,
+        )
+
+    def delete_set_entry_by_exercise_workout_id(self, exercise_workout_id: int) -> None:
+        self.db.execute(
+            "DELETE FROM set_entry WHERE exercise_workout_id = ?;",
             params=(exercise_workout_id,),
             commit=True,
         )

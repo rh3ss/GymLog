@@ -183,6 +183,7 @@
             updateExerciseData($(this));
         });
     });
+    let exercise_index = -1;
 
     function updateExerciseData(selectElement) {
         let selected = selectElement.find('option:selected');
@@ -198,7 +199,7 @@
 
     function addExercise(button){
         let container = $(button).closest('.card').find('.exercise_container');
-        let index = Date.now();
+        let index = exercise_index--;
         let new_card = $(`
             <div class="card mb-3 exercise-card" data-index="${index}">
                 <div class="card-body">

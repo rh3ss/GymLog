@@ -1,5 +1,5 @@
 from datetime import datetime
-from flask import request, session, redirect, url_for
+from flask import request, redirect, url_for
 from ..config import (
     db_select_service,
     db_create_service,
@@ -19,12 +19,9 @@ def edit_workout() -> str:
 
 def _edit_current_workout() -> None:
     _update_workout_attributes()
-    submitted_exercises_workouts_ids = request.form.getlist("exercises_workouts_ids[]")
-    registered_exercise_ids = request.form.getlist("exercise_ids[]")
-    _update_submitted_exercise_workouts(submitted_exercise_workouts=submitted_exercises_workouts_ids)
-    _delete_not_submitted_exercise_workouts(
-        submitted_exercise_workouts=submitted_exercises_workouts_ids
-    )
+    _update_submitted_exercise_workouts()
+    _delete_not_submitted_exercise_workouts()
+    _create_new_registered_exercises_workouts()
 
 
 def _update_workout_attributes() -> None:
@@ -43,29 +40,66 @@ def _update_workout_attributes() -> None:
     )
 
 
-def _update_submitted_exercise_workouts(submitted_exercise_workouts: list[str]) -> None:
-    for id in submitted_exercise_workouts:
-        exercise_workout_set_ids = request.form.getlist(f"sets_ids[{id}][]")
-        exercise_workout_weights = request.form.getlist(f"weights[{id}][]")
-        exercise_workout_reps = request.form.getlist(f"reps[{id}][]")
+def _update_submitted_exercise_workouts() -> None:
+    submitted_exercises_workouts_ids = request.form.getlist("exercises_workouts_ids[]")
+    registered_exercise_ids = request.form.getlist("exercise_ids[]")
+    workout_id = request.form.get("workout_id")
 
-        for i in range(len(exercise_workout_weights)):
-            print(
-                exercise_workout_set_ids[i],
-                exercise_workout_weights[i],
-                exercise_workout_reps[i],
-            )
+    for idx, ew_id in enumerate(submitted_exercises_workouts_ids):
+        db_update_service.update_exercise_workout(
+            exercise_workout_id=ew_id,
+            workout_id=workout_id,
+            exercise_id=registered_exercise_ids[idx],
+        )
 
 
-def _delete_not_submitted_exercise_workouts(
-    submitted_exercise_workouts: list[str],
+def _create_new_registered_exercises_workouts() -> None:
+    submitted_exercises_workouts_ids = request.form.getlist("exercises_workouts_ids[]")
+    registered_exercise_ids = request.form.getlist("exercise_ids[]")
+    workout_id = request.form.get("workout_id")
+    start_idx = len(submitted_exercises_workouts_ids)
+
+    for idx_positive, idx_negativ in zip(
+        range(start_idx, len(registered_exercise_ids)),
+        range(-1, -(len(registered_exercise_ids) - start_idx + 1), -1),
+    ):
+        new_exercise_workout_id = db_create_service.create_exercise_workout(
+            workout_id=workout_id, exercise_id=registered_exercise_ids[idx_positive]
+        )
+        _create_new_registered_exercises_workouts_sets(
+            array_idx=idx_negativ, exercise_workout_id=new_exercise_workout_id
+        )
+
+
+def _create_new_registered_exercises_workouts_sets(
+    array_idx: int, exercise_workout_id: int
 ) -> None:
+    weights = request.form.getlist(f"weights[{array_idx}][]")
+    reps = request.form.getlist(f"reps[{array_idx}][]")
+
+    for idx, set_number in enumerate(range(1, len(reps) + 1)):
+        db_create_service.create_set(
+            exercise_workout_id=exercise_workout_id,
+            set_number=set_number,
+            weight=weights[idx],
+            repetitions=reps[idx],
+        )
+
+
+def _delete_not_submitted_exercise_workouts() -> None:
+    submitted_exercises_workouts_ids = request.form.getlist("exercises_workouts_ids[]")
     workout_id = request.form.get("workout_id")
     exercise_workouts_in_db = db_select_service.get_exercises_workouts_by_workout_ids(
         list_workout_ids=[workout_id]
     )
-    db_ids = [str(ew["exercise_workout_id"]) for ew in exercise_workouts_in_db]
-    ids_to_delete = [id for id in db_ids if id not in submitted_exercise_workouts]
+    exercise_workouts_db_ids = [
+        str(ew["exercise_workout_id"]) for ew in exercise_workouts_in_db
+    ]
+    exercise_workouts_ids_to_delete = [
+        id
+        for id in exercise_workouts_db_ids
+        if id not in submitted_exercises_workouts_ids
+    ]
 
-    for ew_id in ids_to_delete:
+    for ew_id in exercise_workouts_ids_to_delete:
         db_delete_service.delete_exercise_workout_entry(exercise_workout_id=ew_id)

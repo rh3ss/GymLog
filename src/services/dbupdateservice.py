@@ -18,7 +18,7 @@ class DBUpdateService:
         workout_note: str,
     ) -> None:
         self.db.execute(
-            sql=""" UPDATE workout SET workout_type_id = ?, name = ?, date = ?, start_time = ?, end_time = ?, calories_burned = ?, note = ? WHERE workout_id = ?""",
+            sql="UPDATE workout SET workout_type_id = ?, name = ?, date = ?, start_time = ?, end_time = ?, calories_burned = ?, note = ? WHERE workout_id = ?",
             params=(
                 workout_type_id,
                 workout_name,
@@ -29,5 +29,14 @@ class DBUpdateService:
                 workout_note or None,
                 workout_id,
             ),
+            commit=True,
+        )
+
+    def update_exercise_workout(
+        self, exercise_workout_id: int, workout_id: int, exercise_id: int
+    ) -> None:
+        self.db.execute(
+            sql="UPDATE exercise_workout SET workout_id = ?, exercise_id = ? WHERE exercise_workout_id = ?",
+            params=(workout_id, exercise_id, exercise_workout_id),
             commit=True,
         )
