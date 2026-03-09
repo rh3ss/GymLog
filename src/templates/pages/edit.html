@@ -41,13 +41,17 @@
         </form>
         <div class="accordion" id="workoutAccordion">
             {% for w in workouts %}
-            <form method="POST" action="{{ url_for('workouts.edit_workout') }}">
-                <input type="hidden" name="workout_id" value="{{ w.workout_id }}">
-                <div class="accordion-item">
-                    <h2 class="accordion-header" id="heading{{ loop.index }}">
-                        <button class="accordion-button sub-text collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ loop.index }}" aria-expanded="false" aria-controls="collapse{{ loop.index }}">{{ w.date }}</button>
-                    </h2>
-                    <div id="collapse{{ loop.index }}" class="accordion-collapse collapse" aria-labelledby="heading{{ loop.index }}" data-bs-parent="#workoutAccordion">
+            <div class="accordion-item">
+                <h2 class="accordion-header d-flex align-items-center" id="heading{{ loop.index }}">
+                    <button class="accordion-button sub-text collapsed flex-grow-1" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ loop.index }}" aria-expanded="false" aria-controls="collapse{{ loop.index }}">{{ w.date }}</button>
+                    <form method="POST" action="{{ url_for('workouts.delete_workout') }}">
+                        <input type="hidden" name="workout_id" value="{{ w.workout_id }}">
+                        <button type="submit" class="btn btn-custom btn-delete sub-text" onclick="return confirm('Workout wirklich löschen?')"><img src="{{ url_for('static', filename='img/trash.png') }}" width="20px"></button>
+                    </form>
+                </h2>
+                <div id="collapse{{ loop.index }}" class="accordion-collapse collapse" aria-labelledby="heading{{ loop.index }}" data-bs-parent="#workoutAccordion">
+                    <form method="POST" action="{{ url_for('workouts.edit_workout') }}">
+                        <input type="hidden" name="workout_id" value="{{ w.workout_id }}">
                         <div class="accordion-body">
                             <div class="row mb-3">
                                 <div class="col-md-4">
@@ -56,7 +60,11 @@
                                 </div>
                                 <div class="col-md-4">
                                     <label class="form-label sub-text">Trainingstyp</label>
-                                    <input type="text" name="workout_type" class="form-control" value="{{ w.workout_type_id }}" required></input>
+                                    <select name="workout_type" class="form-control" required>
+                                        {% for wt in workout_types %}
+                                            <option value="{{ wt.workout_type_id }}" {% if wt.workout_type_id == w.workout_type_id %}selected{% endif %}>{{ wt.name }}</option>
+                                        {% endfor %}
+                                    </select>
                                 </div>
                                 <div class="col-md-4">
                                     <label class="form-label sub-text">Kalorienverbrauch</label>
@@ -132,10 +140,10 @@
                                                                                 <div class="card-body">
                                                                                     <div class="row">
                                                                                         <div class="col-md-4">
-                                                                                            <input type="number" class="form-control" name="weights[{{ ew.exercise_workout_id }}][]" value="{{ s.weight if s.weight is not none else '' }}" readonly>
+                                                                                            <input type="number" class="form-control" name="weights[{{ ew.exercise_workout_id }}][]" value="{{ s.weight if s.weight is not none else '' }}">
                                                                                         </div>
                                                                                         <div class="col-md-4">
-                                                                                            <input type="number" class="form-control" name="reps[{{ ew.exercise_workout_id }}][]" value="{{ s.repetitions if s.repetitions is not none else '' }}" readonly>
+                                                                                            <input type="number" class="form-control" name="reps[{{ ew.exercise_workout_id }}][]" value="{{ s.repetitions if s.repetitions is not none else '' }}">
                                                                                         </div>
                                                                                         <div class="col-md-3"></div>
                                                                                         <div class="col-md-1"> 
@@ -161,9 +169,9 @@
                             </div>
                             <button type="submit" class="btn btn-custom btn-save-changes sub-text">Änderungen speichern</button>
                         </div>
-                    </div>
+                    </form>
                 </div>
-            </form>
+            </div>
             {% endfor %}
         </div>
     </div>

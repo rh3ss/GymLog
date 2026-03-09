@@ -13,4 +13,4 @@ FROM
 WHERE 
     user_id = ? AND date BETWEEN ? AND ?
 ORDER BY 
-    workout_id DESC;
+    date DESC;

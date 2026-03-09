@@ -8,6 +8,7 @@ value_filter_start_date = value_filter_end_date - timedelta(days=7)
 
 def render_edit_page() -> str:
     workouts = _get_all_workouts_by_date_filtering()
+    workout_types = db_select_service.get_workout_types()
     exercises = db_select_service.get_exercises_with_equipment_and_musclegroup()
     workout_ids = [w["workout_id"] for w in workouts]
     exercises_workouts = db_select_service.get_exercises_workouts_by_workout_ids(
@@ -24,6 +25,7 @@ def render_edit_page() -> str:
         value_filter_start_date=value_filter_start_date,
         value_filter_end_date=value_filter_end_date,
         workouts=workouts,
+        workout_types=workout_types,
         exercises=exercises,
         exercises_workouts=exercises_workouts,
         sets=sets,
