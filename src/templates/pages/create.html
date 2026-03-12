@@ -76,7 +76,7 @@
                             <div class="card mb-3">
                                 <div class="card-header d-flex justify-content-between align-items-center">
                                     <span class="form-label sub-text">Übungen</span>
-                                    <button type="button" class="btn btn-custom btn-add-remove-item" onclick="addExercise()">+</button>
+                                    <button type="button" class="btn btn-custom btn-add-remove-item" onclick="addExercise('exercise_container', true)">+</button>
                                 </div>
                                 <div class="card-body" id="exercise_container"></div>
                             </div>
@@ -93,7 +93,22 @@
                 </div>
                 <div class="collapse" id="collapseThree" aria-labelledby="headingThree" data-bs-parent="#accordion">
                     <div class="card-body">
-                        Übung anlegen Text.
+                        <form method="POST" action="{{ url_for('workouts.create_workout_template') }}">
+                            <div class="row mb-3">
+                                <div class="col-md-12">
+                                    <label class="form-label sub-text">Name</label>
+                                    <input type="text" name="workout_name" class="form-control" required></input>
+                                </div>
+                            </div>
+                            <div class="card mb-3">
+                                <div class="card-header d-flex justify-content-between align-items-center">
+                                    <span class="form-label sub-text">Übungen</span>
+                                    <button type="button" class="btn btn-custom btn-add-remove-item" onclick="addExercise('exercise_container_template', false)">+</button>
+                                </div>
+                                <div class="card-body" id="exercise_container_template"></div>
+                            </div>
+                            <button type="submit" class="btn btn-custom btn-login sub-text">Speichern</button>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -148,9 +163,21 @@
 
     <script>
     let exercise_index = 0;
-    function addExercise() {
+    function addExercise(container_id, bool_param) {
         let index = exercise_index++;
-        let container = $("#exercise_container");
+        let container = $("#" + container_id);
+        let setBlock = bool_param ? `
+            <div class="row mt-3">
+                <div class="col-md-9">
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between">
+                            <span class="form-label sub-text">Sätze</span>
+                            <button type="button" class="btn btn-custom btn-add-remove-item" onclick="addSet(${index})">+</button>
+                        </div>
+                        <div class="card-body sets-container"></div>
+                    </div>
+                </div>
+            </div>` : '';
         let new_card = $(`
             <div class="card mb-3 exercise-card" data-index="${index}">
                 <div class="card-body">
@@ -178,17 +205,7 @@
                             <small class="form-text description-text"></small>
                         </div>
                     </div>
-                    <div class="row mt-3">
-                        <div class="col-md-9">
-                            <div class="card">
-                                <div class="card-header d-flex justify-content-between">
-                                    <span class="form-label sub-text">Sätze</span>
-                                    <button type="button" class="btn btn-custom btn-add-remove-item" onclick="addSet(${index})">+</button>
-                                </div>
-                                <div class="card-body sets-container"></div>
-                            </div>
-                        </div>
-                    </div>
+                    ${setBlock}
                 </div>
             </div>
         `);

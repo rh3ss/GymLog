@@ -51,8 +51,8 @@ def _update_submitted_exercise_workouts() -> None:
             workout_id=workout_id,
             exercise_id=registered_exercise_ids[idx],
         )
-        _update_submitted_exercises_workouts_sets(exercise_workout_id=ew_id)
         _delete_not_submitted_exercise_workouts_sets(exercise_workout_id=ew_id)
+        _update_submitted_exercises_workouts_sets(exercise_workout_id=ew_id)
 
 
 def _update_submitted_exercises_workouts_sets(exercise_workout_id: int) -> None:
@@ -60,14 +60,23 @@ def _update_submitted_exercises_workouts_sets(exercise_workout_id: int) -> None:
     weights = request.form.getlist(f"weights[{exercise_workout_id}][]")
     reps = request.form.getlist(f"reps[{exercise_workout_id}][]")
 
-    for idx, set_number in enumerate(range(1, len(sets_ids) + 1)):
-        db_update_service.update_set_entry(
-            set_entry_id=sets_ids[idx],
-            exercise_workout_id=exercise_workout_id,
-            set_number=set_number,
-            weight=weights[idx],
-            repetitions=reps[idx],
-        )
+    for idx, set_number in enumerate(range(1, len(weights) + 1)):
+        current_set_id = sets_ids[idx]
+        if current_set_id != "":
+            db_update_service.update_set_entry(
+                set_entry_id=sets_ids[idx],
+                exercise_workout_id=exercise_workout_id,
+                set_number=set_number,
+                weight=weights[idx],
+                repetitions=reps[idx],
+            )
+        else:
+            db_create_service.create_set(
+                exercise_workout_id=exercise_workout_id,
+                set_number=set_number,
+                weight=weights[idx],
+                repetitions=reps[idx],
+            )
 
 
 def _delete_not_submitted_exercise_workouts_sets(exercise_workout_id: int) -> None:

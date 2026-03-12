@@ -15,6 +15,6 @@ INNER JOIN
 WHERE
     w.user_id = ?
 ORDER BY
-    w.workout_id DESC
+    w.date DESC
 LIMIT 
     1;

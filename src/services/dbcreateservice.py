@@ -34,6 +34,15 @@ class DBCreateService:
         )
         return inserted_workout_id
 
+    def create_workout_template(self, user_id: int, workout_name: str) -> int:
+        inserted_workout_template_id = self.db.execute(
+            sql="INSERT INTO workout_template (user_id, name) VALUES (?, ?)",
+            params=(user_id, workout_name),
+            commit=True,
+            return_lastrowid=True,
+        )
+        return inserted_workout_template_id
+
     def create_exercise(
         self, equipment_id: int, muscle_group_id: int, name: str, description: str
     ) -> None:
@@ -51,6 +60,16 @@ class DBCreateService:
             return_lastrowid=True,
         )
         return inserted_exercise_workout_id
+
+    def create_exercise_workout_template(
+        self, workout_template_id: int, exercise_id: int, order_number: int
+    ) -> None:
+        self.db.execute(
+            sql="INSERT INTO exercise_workout_template (workout_template_id, exercise_id, order_number) VALUES (?, ?, ?)",
+            params=(workout_template_id, exercise_id, order_number),
+            commit=True,
+            return_lastrowid=True,
+        )
 
     def create_set(
         self, exercise_workout_id: int, set_number: int, weight: float, repetitions: int

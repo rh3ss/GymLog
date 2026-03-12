@@ -19,4 +19,10 @@ workouts_bp = Blueprint("workouts", __name__)
 
 from .auth import auth
 from .pages import pages
-from .workouts import create_workout, edit_workout, delete_workout, create_exercise
+from .workouts import (
+    create_workout,
+    edit_workout,
+    delete_workout,
+    create_workout_template,
+    create_exercise,
+)
