@@ -70,3 +70,18 @@ class DBSelectService:
         ).format(placeholders=", ".join("?" for _ in list_exercise_workout_ids))
 
         return self.db.execute(sql=sql, params=list_exercise_workout_ids, fetch=True)
+
+    def get_workout_templates(self, user_id: int) -> list[tuple]:
+        return self.db.execute(
+            sql="SELECT workout_template_id, name FROM workout_template WHERE user_id = ?",
+            params=(user_id,),
+            fetch=True,
+        )
+
+    def get_workout_template_exercises_by_template_id(
+        self, workout_template_id: int
+    ) -> list[tuple]:
+        sql = self.db.extract_sql(
+            file_name="extract_workout_template_exercises_by_template_id.sql"
+        )
+        return self.db.execute(sql=sql, params=(workout_template_id,), fetch=True)

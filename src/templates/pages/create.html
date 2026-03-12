@@ -69,9 +69,20 @@
                                     <input type="time" name="workout_end_time" class="form-control"></input>
                                 </div>
                             </div>
-                            <div class="mb-3">
-                                <label class="form-label sub-text">Notiz</label>
-                                <textarea type="text" name="workout_note" class="form-control" rows="1"></textarea>
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label class="form-label sub-text">Notiz</label>
+                                    <textarea type="text" name="workout_note" class="form-control" rows="1"></textarea>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label sub-text">Trainingsvorlage</label>
+                                    <select class="form-control" name="workout_templates" id="template_select">
+                                        <option value="" selected>Ohne</option>
+                                        {% for wt in workout_templates %}
+                                            <option value="{{ wt.workout_template_id }}">{{ wt.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
                             </div>
                             <div class="card mb-3">
                                 <div class="card-header d-flex justify-content-between align-items-center">
@@ -163,7 +174,7 @@
 
     <script>
     let exercise_index = 0;
-    function addExercise(container_id, bool_param) {
+    function addExercise(container_id, bool_param, selected_exercise_id=null) {
         let index = exercise_index++;
         let container = $("#" + container_id);
         let setBlock = bool_param ? `
@@ -211,10 +222,15 @@
         `);
         container.append(new_card);
         new_card.find('.selectpicker').selectpicker();
-        new_card.find('select.selectpicker').on('changed.bs.select', function() {
+        let select = new_card.find('select.selectpicker');
+        if(selected_exercise_id !== null){
+            select.selectpicker('val', String(selected_exercise_id));
+            select.selectpicker('refresh');
+        }
+        select.on('changed.bs.select', function() {
             updateExerciseData($(this));
         });
-        updateExerciseData(new_card.find('select.selectpicker'));
+        updateExerciseData(select);
         function updateExerciseData(selectElement) {
             let selected = selectElement.find('option:selected');
             let muscle_group = selected.data('muscle-group-id') || '';
@@ -226,7 +242,9 @@
             card.find('input[name="equipment[]"]').val(equipment);
             card.find('.description-text').text(description);
         }
-        addSet(index);
+        if(bool_param){
+            addSet(index);
+        }
     }
 
     function addSet(exercise_index) {
@@ -262,6 +280,21 @@
             button.closest('.setCard').remove();
         }
     }
+
+    $("#template_select").on("change", function(){
+        let template_id = $(this).val();
+        if(template_id === ""){
+            $("#exercise_container").empty();
+            return;
+        }
+        $.get(`/get_workout_template_exercises/${template_id}`, function(data){
+            $("#exercise_container").empty();
+            exercise_index = 0;
+            data.forEach(exercise => {
+                addExercise('exercise_container', true, exercise.exercise_id);
+            });
+        });
+    });
 
     </script>
 </body>

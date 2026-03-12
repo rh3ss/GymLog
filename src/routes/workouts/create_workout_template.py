@@ -1,4 +1,3 @@
-from datetime import datetime
 from flask import request, session, redirect, url_for
 from ..config import db_create_service, workouts_bp
 
@@ -23,7 +22,7 @@ def _create_workout_template() -> int:
 def _create_workout_template_exercises(workout_template_id: int) -> None:
     exercises = request.form.getlist("workout_exercises[]")
 
-    for idx, exercise_id in enumerate(range(1, len(exercises) + 1)):
+    for idx, exercise_id in enumerate(exercises, start=1):
         db_create_service.create_exercise_workout_template(
             workout_template_id=workout_template_id,
             exercise_id=exercise_id,
