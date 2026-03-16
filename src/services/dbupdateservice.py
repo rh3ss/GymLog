@@ -32,6 +32,16 @@ class DBUpdateService:
             commit=True,
         )
 
+    def update_exercise(self, exercise_id: int, description: str) -> None:
+        self.db.execute(
+            sql="UPDATE exercise SET description = ? WHERE exercise_id = ?",
+            params=(
+                description,
+                exercise_id,
+            ),
+            commit=True,
+        )
+
     def update_exercise_workout(
         self, exercise_workout_id: int, workout_id: int, exercise_id: int
     ) -> None:

@@ -174,6 +174,39 @@
             </div>
             {% endfor %}
         </div>
+        <div class="card">
+            <div class="card-body">
+                <form method="POST" action="{{ url_for('workouts.edit_exercise') }}">
+                    <label class="form-label sub-text">Übungen bearbeiten</label>
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <label class="form-label sub-text">Name</label>
+                            <select class="form-control" id="exercise_select" name="exercise_id" required>
+                                <option value="">Übung wählen</option>
+                                {% for ex in exercises %}
+                                    <option value="{{ ex.exercise_id }}" data-name="{{ ex.exercise_name }}" data-description="{{ ex.exercise_description }}" data-muscle="{{ ex.muscle_group_name }}" data-equipment="{{ ex.equipment_name }}">
+                                        {{ ex.exercise_name }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label sub-text">Muskelgruppe</label>
+                            <input type="text" id="muscle_group" class="form-control" readonly>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label sub-text">Equipment</label>
+                            <input type="text" id="equipment" class="form-control" readonly>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label sub-text">Beschreibung</label>
+                        <textarea id="exercise_description" name="exercise_description" class="form-control" rows="1"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-custom btn-login sub-text">Änderungen speichern</button>
+                </form>
+            </div>
+        </div>
     </div>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
@@ -294,6 +327,14 @@
             $(button).closest('.setCard').remove();
         }
     }
+
+    $("#exercise_select").on("change", function(){
+        let option = $(this).find("option:selected");
+        $("#exercise_name").val(option.data("name"));
+        $("#exercise_description").val(option.data("description"));
+        $("#muscle_group").val(option.data("muscle"));
+        $("#equipment").val(option.data("equipment"));
+    });
 
     </script>
 </body>

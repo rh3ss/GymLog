@@ -25,4 +25,5 @@ from .workouts import (
     delete_workout,
     create_workout_template,
     create_exercise,
+    edit_exercise,
 )
