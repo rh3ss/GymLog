@@ -1,5 +1,5 @@
-from flask import request, render_template, session, redirect, url_for
-from ..config import db_select_service, db_update_service, workouts_bp
+from flask import request, redirect, url_for
+from ..config import db_update_service, workouts_bp
 
 
 @workouts_bp.route("/edit_exercise", methods=["POST"])

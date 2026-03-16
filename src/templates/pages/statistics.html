@@ -5,6 +5,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body class="bg-light">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark position-relative">
@@ -27,8 +28,98 @@
             <a href="{{ url_for('pages.statistics_page') }}" class="btn btn-custom btn-switch btn-switch-selected mx-2">Auswertung</a>
         </div>
     </div>
-	    <div class="container mt-4">
-        <h2 class="mb-4">Statistik anzeigen</h2>
+    <div class="container mt-4">
+        <div class="row text-center">   
+            <div class="col-md-3">
+                <div class="stat-card color-total-calories">
+                    <div class="stat-title">Total Calories</div>
+                    <div class="stat-value">{{ total_calories }}</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-card color-avg-calories">
+                    <div class="stat-title">Avg Calories / Workout</div>
+                    <div class="stat-value">{{ avg_calories|round(1) }}</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-card color-total-duration">
+                    <div class="stat-title">Total Duration</div>
+                    <div class="stat-value">{{ total_duration }} min</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-card color-avg-duration">
+                    <div class="stat-title">Avg Duration</div>
+                    <div class="stat-value">{{ avg_duration|round(1) }} min</div>
+                </div>
+            </div>
+        </div>
     </div>
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-6">
+                <h4 class="text-center mb-3">Top Exercises</h4>
+                <div class="chart-container">
+                    <canvas id="exerciseChart"></canvas>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <h4 class="text-center mb-3">Workout Types</h4>
+                <div class="chart-container">
+                    <canvas id="workoutTypeChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script id="chart-data" type="application/json">
+        {
+            "workoutLabels": {{ workout_labels | tojson }},
+            "workoutData": {{ workout_data | tojson }},
+            "exerciseLabels": {{ exercise_labels | tojson }},
+            "exerciseData": {{ exercise_data | tojson }}
+        }
+    </script>
+    <script>
+        const statsData = JSON.parse(
+            document.getElementById("chart-data").textContent
+        );
+
+        new Chart(document.getElementById('exerciseChart'), {
+            type: 'doughnut',
+            data: {
+                labels: statsData.exerciseLabels,
+                datasets: [{
+                    data: statsData.exerciseData,
+                    backgroundColor: ['#FF5F00', '#FF8800', '#FF8C00', '#FFC300','#FFD400']
+                }]
+            },
+            options: {
+                plugins: {
+                    legend: {
+                        position: 'left'
+                    }
+                }
+            }
+        });
+
+        new Chart(document.getElementById('workoutTypeChart'), {
+            type: 'doughnut',
+            data: {
+                labels: statsData.workoutLabels,
+                datasets: [{
+                    data: statsData.workoutData,
+                    backgroundColor: ['#0D1A63', '#1A2CA3', '#2845D6', '#5478FF', '#53CBF3']
+                }]
+            },
+            options: {
+                plugins: {
+                    legend: {
+                        position: 'right'
+                    }
+                }
+            }
+        });
+    </script>
 </body>
 </html>

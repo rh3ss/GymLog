@@ -25,8 +25,8 @@ body {
 }
 
 .nav-text {
-    font-size: 40px;          
-    font-weight: 700;        
+    font-size: 40px;
+    font-weight: 700;
     font-family: 'Bebas Neue', Arial, sans-serif;
     letter-spacing: 2px;
 }
@@ -61,15 +61,15 @@ body {
 }
 
 .header-text {
-    font-size: 60px;          
-    font-weight: 500;        
+    font-size: 60px;
+    font-weight: 500;
     font-family: 'Bebas Neue', Arial, sans-serif;
     letter-spacing: 2px;
 }
 
 .sub-text {
     font-size: 20px;
-    font-weight: 1;     
+    font-weight: 1;
     font-family: 'Bebas Neue', Arial, sans-serif;
     letter-spacing: 3px;
 }
@@ -124,7 +124,7 @@ body {
 }
 
 .btn-add-remove-item {
-    height: 40px; 
+    height: 40px;
     width: 40px;
     font-size: 20px;
     font-weight: bold;
@@ -168,4 +168,55 @@ body {
     background-color: #ffcccd;
     border-color: #d2042d;
     color: #ffffff;
+}
+
+.stat-card {
+    position: relative;
+    padding: 20px;
+    border-radius: 12px;
+    height: 120px;
+    font-family: 'Bebas Neue', sans-serif;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.stat-title {
+    position: absolute;
+    top: 12px;
+    left: 15px;
+    font-size: 18px;
+    letter-spacing: 1px;
+}
+
+.stat-value {
+    font-size: 42px;
+    font-weight: bold;
+}
+
+.color-total-calories {
+    background-color: #ff4400;
+}
+
+.color-avg-calories {
+    background-color: #ff5500;
+}
+
+.color-total-duration {
+    background-color: #500073;
+}
+
+.color-avg-duration {
+    background-color: #502073;
+}
+
+.row .col-md-3 {
+    padding: 10px;
+}
+
+.chart-container {
+    width: 450px;
+    height: 450px;
+    margin: auto;
 }

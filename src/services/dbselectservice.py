@@ -84,4 +84,49 @@ class DBSelectService:
         sql = self.db.extract_sql(
             file_name="extract_workout_template_exercises_by_template_id.sql"
         )
+
         return self.db.execute(sql=sql, params=(workout_template_id,), fetch=True)
+
+    def get_total_calories_burnd(self, user_id: int) -> int:
+        result = self.db.execute(
+            sql="SELECT SUM(calories_burned) FROM workout WHERE user_id = ?",
+            params=(user_id,),
+            fetch=True,
+        )
+
+        return result[0][0] if result and result[0][0] else 0
+
+    def get_avg_calories(self, user_id: int) -> float:
+        result = self.db.execute(
+            sql="SELECT AVG(calories_burned) FROM workout WHERE user_id = ?",
+            params=(user_id,),
+            fetch=True,
+        )
+
+        return result[0][0] if result and result[0][0] else 0
+
+    def get_total_duration(self, user_id: int) -> float:
+        result = self.db.execute(
+            sql="SELECT SUM((strftime('%s', end_time) - strftime('%s', start_time)) / 60.0) FROM workout WHERE user_id = ?",
+            params=(user_id,),
+            fetch=True,
+        )
+
+        return result[0][0] if result and result[0][0] else 0
+
+    def get_avg_workout_duration(self, user_id: int) -> float:
+        sql = self.db.extract_sql(file_name="extract_avg_workout_duration.sql")
+
+        result = self.db.execute(sql=sql, params=(user_id,), fetch=True)
+
+        return result[0][0] if result and result[0][0] else 0
+
+    def get_workout_type_distribution(self, user_id: int) -> list[tuple]:
+        sql = self.db.extract_sql(file_name="extract_workout_type_distribution.sql")
+
+        return self.db.execute(sql=sql, params=(user_id,), fetch=True)
+
+    def get_top_exercises(self, user_id: int) -> list[tuple]:
+        sql = self.db.extract_sql(file_name="extract_top_exercises.sql")
+
+        return self.db.execute(sql=sql, params=(user_id,), fetch=True)
