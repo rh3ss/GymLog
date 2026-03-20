@@ -23,6 +23,7 @@ def render_statistics_page() -> str:
 
     return render_template(
         "pages/statistics.html",
+        user_name=session["user_name"],
         total_calories=total_calories,
         avg_calories=avg_calories,
         total_duration=total_duration,
