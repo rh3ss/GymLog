@@ -29,7 +29,7 @@
             <a href="{{ url_for('pages.edit_page') }}" class="btn btn-custom btn-switch mx-2">Bearbeiten</a>
             <a href="{{ url_for('pages.statistics_page') }}" class="btn btn-custom btn-switch mx-2">Auswertung</a>
         </div>
-        {% if exercises_workouts %}
+        {% if last_workout %}
             <div class="container mt-4">
                 <h2 class="form-label header-text">Dein letztes Workout am {{ last_workout[0].date }}</h2>
             </div>
