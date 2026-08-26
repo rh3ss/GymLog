@@ -50,6 +50,10 @@ First, the workout itself is created and a unique `workout_id` is returned. Afte
   <img src="https://github.com/user-attachments/assets/ea814ef1-b572-42d2-af36-86cec5144af3" alt="Sequence Diagram" width="600">
 </p>
 
+## User Documentation
+
+As part of the project, a detailed user documentation `/docs/user-documentation.pdf` was created and includes installation instructions, system requirements, user workflows, navigation guidance, workout management features, statistical analysis tools, and maintenance recommendations. It was designed to ensure that users can effectively operate the application without requiring technical knowledge.
+
 # License
 
 This project is intended for learning and personal use. Feel free to use and experiment.
